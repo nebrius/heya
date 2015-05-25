@@ -50,12 +50,18 @@ function create(options) {
     throw new Error('Invalid driver');
   }
 
-  async.parallel([
+  async.series([
     function(next) {
-      controller.on('ready', next);
+      controller.connect(function() {
+        console.log('Controller connected');
+        next();
+      });
     },
     function(next) {
-      driver.on('ready', next);
+      driver.connect(function() {
+        console.log('Driver connected');
+        next();
+      });
     }
   ], function() {
     console.log('Sumobot ready!');

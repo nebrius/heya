@@ -28,7 +28,12 @@ var http = require('http');
 
 module.exports = WebKeyboard;
 
-function WebKeyboard() {
+function WebKeyboard(options) {
+  this._options = options;
+}
+util.inherits(WebKeyboard, EventEmitter);
+
+WebKeyboard.prototype.connect = function connect(cb) {
   var webpage = require('fs').readFileSync(__dirname + '/control.html').toString();
   http.createServer(function (req, res) {
     var url = require('url').parse(req.url);
@@ -41,9 +46,7 @@ function WebKeyboard() {
       res.end(webpage);
     }
   }.bind(this)).listen(8000, '127.0.0.1', function() {
-    this.emit('ready');
+    cb();
     console.log('Open your browser and point it to http://127.0.0.1:8000 to control the bot');
-  }.bind(this));
-
-}
-util.inherits(WebKeyboard, EventEmitter);
+  });
+};

@@ -25,8 +25,96 @@ THE SOFTWARE.
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 
-module.exports = WebKeyboard;
+module.exports = DigitalJoystick;
 
-function WebKeyboard() {
+function DigitalJoystick(options) {
+  this._options = options;
 }
-util.inherits(WebKeyboard, EventEmitter);
+util.inherits(DigitalJoystick, EventEmitter);
+
+DigitalJoystick.prototype.connect = function connect(cb) {
+  var five = require('johnny-five');
+  var board = new five.Board({
+    io: this._options.io,
+    repl: false
+  });
+
+  board.on('ready', function() {
+    var state = {
+      up: false,
+      right: false,
+      down: false,
+      left: false
+    };
+
+    var process = function process() {
+      var key = 0;
+      if (state.up) {
+        key += 0x01;
+      }
+      if (state.right) {
+        key += 0x02;
+      }
+      if (state.down) {
+        key += 0x04;
+      }
+      if (state.left) {
+        key += 0x08;
+      }
+      var direction;
+      switch (key) {
+        case 0x00:
+          direction = 'none';
+          break;
+        case 0x01:
+          direction = 'up';
+          break;
+        case 0x03:
+          direction = 'upright';
+          break;
+        case 0x02:
+          direction = 'right';
+          break;
+        case 0x06:
+          direction = 'downright';
+          break;
+        case 0x04:
+          direction = 'down';
+          break;
+        case 0x0C:
+          direction = 'downleft';
+          break;
+        case 0x08:
+          direction = 'left';
+          break;
+        case 0x09:
+          direction = 'upleft';
+          break;
+      }
+      if (direction) {
+        this.emit('move', direction);
+      }
+    }.bind(this);
+
+    function initPin(pin, name) {
+      var button = new five.Button(pin);
+      button.on('press', function() {
+        state[name] = true;
+        process();
+      });
+      button.on('release', function() {
+        state[name] = false;
+        process();
+      });
+    }
+
+
+    initPin(this._options.left, 'left');
+    initPin(this._options.right, 'right');
+    initPin(this._options.up, 'up');
+    initPin(this._options.down, 'down');
+
+    cb();
+
+  }.bind(this));
+};

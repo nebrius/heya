@@ -37,30 +37,34 @@ var RIGHT_REVERSE_SLOW = 93;
 module.exports = PawelBot;
 
 function PawelBot(options) {
+  this._options = options;
+}
+util.inherits(PawelBot, EventEmitter);
+
+PawelBot.prototype.connect = function(cb) {
   var five = require('johnny-five');
   var board = new five.Board({
     repl: false,
-    io: options.io
+    io: this._options.io
   });
 
   board.on('ready', function() {
     this._leftServo = new five.Servo({
-      pin: options.leftServo,
+      pin: this._options.leftServo,
       type: 'continuous'
     });
 
     this._rightServo = new five.Servo({
-      pin: options.rightServo,
+      pin: this._options.rightServo,
       type: 'continuous'
     });
 
     this._leftServo.stop();
     this._rightServo.stop();
 
-    this.emit('ready');
+    cb();
   }.bind(this));
-}
-util.inherits(PawelBot, EventEmitter);
+};
 
 PawelBot.prototype.move = function move(direction) {
   switch(direction) {
