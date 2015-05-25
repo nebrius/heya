@@ -45,8 +45,9 @@ WebKeyboard.prototype.connect = function connect(cb) {
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(webpage);
     }
-  }.bind(this)).listen(8000, '127.0.0.1', function() {
+  }.bind(this)).listen(this._options.port || 8000, '127.0.0.1', function() {
     cb();
-    console.log('Open your browser and point it to http://127.0.0.1:8000 to control the bot');
-  });
+    console.log('Open your browser and point it to http://127.0.0.1:' +
+      (this._options.port || 8000) + ' to control the bot');
+  }.bind(this));
 };
