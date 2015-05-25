@@ -15,19 +15,14 @@ npm install heya
 
 ## Examples
 
-This example uses the Digital Joystick controller and the Pawel Bot driver. The Digital Joystick is connected to an Arduino Uno on pins 2, 3, 4, and 5, and the Pawel Bot is connected to a Spark Core with the servos on pins A0 and A1.
+This example uses the Web Keyboard controller and the Pawel Bot driver for controlling an Arduino based sumobot.
 
 ```JavaScript
 var heya = require('heya');
 var Spark = require('spark-io');
 
 heya.create({
-  controller: new heya.controllers.DigitalJoystick({
-    left: '5',
-    right: '2',
-    up: '3',
-    down: '4'
-  }),
+  controller: new heya.controllers.WebKeyboard(),
   driver: new heya.drivers.PawelBot({
     leftServo: 'A0',
     rightServo: 'A1'
