@@ -21,3 +21,84 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
+
+var LEFT_FORWARD = 180;
+var LEFT_FORWARD_SLOW = 92.5;
+var RIGHT_FORWARD = 0;
+var RIGHT_FORWARD_SLOW = 87.5;
+var LEFT_REVERSE = 0;
+var LEFT_REVERSE_SLOW = 87;
+var RIGHT_REVERSE = 180;
+var RIGHT_REVERSE_SLOW = 93;
+
+module.exports = PawelBot;
+
+function PawelBot(options) {
+  var five = require('johnny-five');
+  var board = new five.Board({
+    repl: false,
+    io: options.io
+  });
+
+  board.on('ready', function() {
+    this._leftServo = new five.Servo({
+      pin: options.leftServo,
+      type: 'continuous'
+    });
+
+    this._rightServo = new five.Servo({
+      pin: options.rightServo,
+      type: 'continuous'
+    });
+
+    this._leftServo.stop();
+    this._rightServo.stop();
+
+    this.emit('ready');
+  }.bind(this));
+}
+util.inherits(PawelBot, EventEmitter);
+
+PawelBot.prototype.move = function move(direction) {
+  switch(direction) {
+    case 'none':
+      this._leftServo.stop();
+      this._rightServo.stop();
+      break;
+    case 'up':
+      this._leftServo.to(LEFT_FORWARD);
+      this._rightServo.to(RIGHT_FORWARD);
+      break;
+    case 'upright':
+      this._leftServo.to(LEFT_FORWARD);
+      this._rightServo.to(RIGHT_FORWARD_SLOW);
+      break;
+    case 'right':
+      this._leftServo.to(LEFT_FORWARD);
+      this._rightServo.to(RIGHT_REVERSE);
+      break;
+    case 'downright':
+      this._leftServo.to(LEFT_REVERSE);
+      this._rightServo.to(RIGHT_REVERSE_SLOW);
+      break;
+    case 'down':
+      this._leftServo.to(LEFT_REVERSE);
+      this._rightServo.to(RIGHT_REVERSE);
+      break;
+    case 'downleft':
+      this._leftServo.to(LEFT_REVERSE_SLOW);
+      this._rightServo.to(RIGHT_REVERSE);
+      break;
+    case 'left':
+      this._leftServo.to(LEFT_REVERSE);
+      this._rightServo.to(RIGHT_FORWARD);
+      break;
+    case 'upleft':
+      this._leftServo.to(LEFT_FORWARD_SLOW);
+      this._rightServo.to(RIGHT_FORWARD);
+      break;
+  }
+};

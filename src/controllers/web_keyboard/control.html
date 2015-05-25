@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <script>
+    var map = {
+      'Up': 'up',
+      'U+0057': 'up',
+      'Down': 'down',
+      'U+0053': 'down',
+      'Right': 'right',
+      'U+0044': 'right',
+      'Left': 'left',
+      'U+0041': 'left'
+    };
+    var state = {
+      up: false,
+      right: false,
+      down: false,
+      left: false
+    };
+    var clawState = 'open';
+    function onload() {
+      function process() {
+        var key = 0;
+        if (state.up) {
+          key += 0x01;
+        }
+        if (state.right) {
+          key += 0x02;
+        }
+        if (state.down) {
+          key += 0x04;
+        }
+        if (state.left) {
+          key += 0x08;
+        }
+        var direction;
+        switch(key) {
+          case 0x00:
+            direction = 'none';
+            break;
+          case 0x01:
+            direction = 'up';
+            break;
+          case 0x03:
+            direction = 'upright';
+            break;
+          case 0x02:
+            direction = 'right';
+            break;
+          case 0x06:
+            direction = 'downright';
+            break;
+          case 0x04:
+            direction = 'down';
+            break;
+          case 0x0C:
+            direction = 'downleft';
+            break;
+          case 0x08:
+            direction = 'left';
+            break;
+          case 0x09:
+            direction = 'upleft';
+            break;
+        }
+        if (direction) {
+          console.log(direction);
+          var xhr = new XMLHttpRequest();
+          xhr.open('get', window.location.protocol + '//' + window.location.host + '/move/' + direction);
+          xhr.send();
+          document.getElementById('status').innerHTML = direction;
+        }
+      }
+      window.onkeyup = function (e) {
+        var key = e.keyIdentifier;
+        if (state[map[key]] == true) {
+          state[map[key]] = false;
+          process();
+        }
+      };
+      window.onkeydown = function (e) {
+        var key = e.keyIdentifier;
+        if (state[map[key]] == false) {
+          state[map[key]] = true;
+          process();
+        }
+      };
+    }
+    </script>
+  </head>
+  <body onload="onload()">
+    <div id='status'>none</div>
+  </body>
+</html>

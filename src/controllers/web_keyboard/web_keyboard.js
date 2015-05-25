@@ -21,3 +21,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
+var http = require('http');
+
+module.exports = WebKeyboard;
+
+function WebKeyboard() {
+  var webpage = require('fs').readFileSync(__dirname + '/control.html').toString();
+  http.createServer(function (req, res) {
+    var url = require('url').parse(req.url);
+    var move = url.path.match(/^\/move\/(.*)$/);
+    if (move) {
+      this.emit('move', move[1]);
+      res.end();
+    } else {
+      res.writeHead(200, {'Content-Type': 'text/html'});
+      res.end(webpage);
+    }
+  }.bind(this)).listen(8000, '127.0.0.1', function() {
+    this.emit('ready');
+    console.log('Open your browser and point it to http://127.0.0.1:8000 to control the bot');
+  }.bind(this));
+
+}
+util.inherits(WebKeyboard, EventEmitter);

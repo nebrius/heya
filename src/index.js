@@ -22,16 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+var EventEmitter = require('events').EventEmitter;
 var async = require('async');
 
 module.exports = {
   controllers: {
-    atari: require('./controllers/atari.js'),
-    stdin: require('./controllers/stdin.js'),
-    web: require('./controllers/web.js')
+    DigitalJoystick: require('./controllers/digital_joystick/digital_joystick.js'),
+    WebKeyboard: require('./controllers/web_keyboard/web_keyboard.js')
   },
   drivers: {
-    pawelBot: require('./drivers/pawel_bot.js')
+    PawelBot: require('./drivers/pawel_bot.js')
   },
   create: create
 };
@@ -40,21 +40,28 @@ function create(options) {
   if (typeof options != 'object') {
     throw new Error('Invalid options');
   }
-  if (typeof options.controller != 'object') {
+
+  var controller = options.controller;
+  var driver = options.driver;
+  if (!(controller instanceof EventEmitter)) {
     throw new Error('Invalid controller');
   }
-  if (typeof options.driver != 'object') {
+  if (!(driver instanceof EventEmitter)) {
     throw new Error('Invalid driver');
   }
 
   async.parallel([
     function(next) {
-      options.controller.init(next);
+      controller.on('ready', next);
     },
     function(next) {
-      options.driver.init(next);
+      driver.on('ready', next);
     }
   ], function() {
-    options.controller.on('input', driver.move);
+    console.log('Sumobot ready!');
+    controller.on('move', function(direction) {
+      console.log('Move ' + direction);
+      driver.move(direction);
+    });
   });
 }
