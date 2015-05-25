@@ -30,17 +30,12 @@ heya.create({
   }),
   driver: new heya.drivers.PawelBot({
     leftServo: 'A0',
-    rightServo: 'A1',
-    io: new Spark({
-      token: process.env.SPARK_TOKEN,
-      deviceId: process.env.SPARK_DEVICE_ID
-    })
+    rightServo: 'A1'
   })
 });
-
 ```
 
-## Controllers
+## Included Controllers
 
 ### Web Keyboard
 
@@ -62,6 +57,15 @@ _Options_:
     <td>The port for the server to listen on</td>
   </tr>
 </table>
+
+```JavaScript
+var heya = require('heya');
+
+heya.create({
+  controller: new heya.controllers.WebKeyboard(),
+  driver: ...
+});
+```
 
 ### Digital Joystick
 
@@ -89,7 +93,21 @@ _Options_:
   </tr>
 </table>
 
-## Drivers
+```JavaScript
+var heya = require('heya');
+
+heya.create({
+  controller: new heya.controllers.DigitalJoystick({
+    left: '5',
+    right: '2',
+    up: '3',
+    down: '4'
+  }),
+  driver: ...
+});
+```
+
+## Included Drivers
 
 ### Pawel Bot
 
@@ -117,9 +135,26 @@ _Options_:
   </tr>
 </table>
 
+```JavaScript
+var heya = require('heya');
+var Spark = require('spark-io');
+
+heya.create({
+  controller: ...,
+  driver: new heya.drivers.PawelBot({
+    leftServo: 'A0',
+    rightServo: 'A1',
+    io: new Spark({
+      token: process.env.SPARK_TOKEN,
+      deviceId: process.env.SPARK_DEVICE_ID
+    })
+  })
+});
+```
+
 ### Remote Pawel Bot
 
-The Remote Pawel Bot driver works the same as the normal Pawel Bot driver, except that it connects to a remote host that actually drives the motors, such as a Raspberry Pi, Beagle Bone Black, etc.
+The Remote Pawel Bot driver works the same as the normal Pawel Bot driver, except that it connects to a remote host that actually drives the motors, such as a Raspberry Pi, Beagle Bone Black, etc. Use this in conjunction with the [heya-remote-pawel-bot](https://github.com/bryan-m-hughes/heya-remote-pawel-bot) moudle running on the remote host.
  
 _Options_:
 
@@ -137,6 +172,35 @@ _Options_:
     <td>The base URL of the remote server, minus a trailing slash, e.g. "http://1.2.3.4:8000"</td>
   </tr>
 </table>
+
+```JavaScript
+var heya = require('heya');
+
+heya.create({
+  controller: ...,
+  driver: new heya.drivers.RemotePawelBot({
+    url: 'http://1.2.3.4:8000'
+  })
+});
+```
+
+## Custom controllers and drivers
+
+### Controllers
+
+A controller extends EventEmitter and emits a ```move``` event when input is received. The move event payload is a string with one of the following values: ```up```, ```upright```, ```right```, ```downright```, ```down```, ```downleft```, ```left```, ```upleft```, or ```none```. The ```none``` value means that the controller was released back to the center position, a.k.a. this is how we indicate that movement should stop.
+
+The controller also must implement a ```connect``` instance method. The connect method is where any initialization should take place. This method takes a single argument, a callback, that is to be called once initialization is complete.
+
+See the [Digital Joystick](src/controllers/digital_joystick/digital_joystick.js) for an example.
+
+### Drivers
+
+A driver implements two instance methods, but does not extend EventEmitter. Drivers must implement a ```connect``` method that behaves the same as a controller's ```connect``` method.
+
+Drivers also must implement a ```move``` method that takes a single string indicating the direction to move in, which one of the values emitted by a controller.
+
+See the [Pawel Bot](src/drivers/pawel_bot.js) for an example.
 
 License
 =======

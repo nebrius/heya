@@ -108,7 +108,6 @@ DigitalJoystick.prototype.connect = function connect(cb) {
       });
     }
 
-
     initPin(this._options.left, 'left');
     initPin(this._options.right, 'right');
     initPin(this._options.up, 'up');
