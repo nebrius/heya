@@ -19,7 +19,6 @@ This example uses the Web Keyboard controller and the Pawel Bot driver for contr
 
 ```JavaScript
 var heya = require('heya');
-var Spark = require('spark-io');
 
 heya.create({
   controller: new heya.controllers.WebKeyboard(),
