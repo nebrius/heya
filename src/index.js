@@ -43,10 +43,10 @@ function create(options) {
 
   var controller = options.controller;
   var driver = options.driver;
-  if (!(controller instanceof EventEmitter)) {
+  if (!(controller instanceof EventEmitter) || !controller.connect) {
     throw new Error('Invalid controller');
   }
-  if (!(driver instanceof EventEmitter)) {
+  if (typeof driver != 'object' || !driver.connect || !driver.move) {
     throw new Error('Invalid driver');
   }
 

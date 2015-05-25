@@ -22,9 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-var EventEmitter = require('events').EventEmitter;
-var util = require('util');
-
 var LEFT_FORWARD = 180;
 var LEFT_FORWARD_SLOW = 92.5;
 var RIGHT_FORWARD = 0;
@@ -39,7 +36,6 @@ module.exports = PawelBot;
 function PawelBot(options) {
   this._options = options;
 }
-util.inherits(PawelBot, EventEmitter);
 
 PawelBot.prototype.connect = function(cb) {
   var five = require('johnny-five');
