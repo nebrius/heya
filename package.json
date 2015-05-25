@@ -24,6 +24,7 @@
   "homepage": "https://github.com/bryan-m-hughes/heya#readme",
   "dependencies": {
     "async": "^1.0.0",
-    "johnny-five": "^0.8.76"
+    "johnny-five": "^0.8.76",
+    "request": "^2.55.0"
   }
 }

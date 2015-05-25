@@ -31,7 +31,8 @@ module.exports = {
     WebKeyboard: require('./controllers/web_keyboard/web_keyboard.js')
   },
   drivers: {
-    PawelBot: require('./drivers/pawel_bot.js')
+    PawelBot: require('./drivers/pawel_bot.js'),
+    RemotePawelBot: require('./drivers/remote_pawel_bot.js')
   },
   create: create
 };
