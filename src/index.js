@@ -67,8 +67,8 @@ function create(options) {
   ], function() {
     console.log('Sumobot ready!');
     controller.on('move', function(direction) {
-      console.log('Move ' + direction);
-      driver.move(direction);
+      console.log('Direction (' + direction.x + ',' + direction.y + ')');
+      driver.move(direction.x, direction.y);
     });
   });
 }

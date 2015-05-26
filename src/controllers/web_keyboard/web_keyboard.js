@@ -39,7 +39,49 @@ WebKeyboard.prototype.connect = function connect(cb) {
     var url = require('url').parse(req.url);
     var move = url.path.match(/^\/move\/(.*)$/);
     if (move) {
-      this.emit('move', move[1]);
+      var x, y;
+      switch(move[1]) {
+        case 'up':
+          x = 1;
+          y = 0;
+          break;
+        case 'upright':
+          x = 0.707;
+          y = 0.707;
+          break;
+        case 'right':
+          x = 0;
+          y = 1;
+          break;
+        case 'downright':
+          x = 0.707;
+          y = -0.707;
+          break;
+        case 'down':
+          x = 0;
+          y = -1;
+          break;
+        case 'downleft':
+          x = -0.707;
+          y = -0.707;
+          break;
+        case 'left':
+          x = -1;
+          y = 0;
+          break;
+        case 'upleft':
+          x = -0.707;
+          y = 0.707;
+          break;
+        case 'none':
+          x = 0;
+          y = 0;
+          break;
+      }
+      this.emit('move', {
+        x: x,
+        y: y
+      });
       res.end();
     } else {
       res.writeHead(200, {'Content-Type': 'text/html'});

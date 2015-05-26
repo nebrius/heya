@@ -52,13 +52,14 @@ PawelBot.prototype.connect = function(cb) {
   tryRequest();
 };
 
-PawelBot.prototype.move = function move(direction) {
+PawelBot.prototype.move = function move(x, y) {
   request({
     method: 'post',
     json: true,
     url: this._options.url + '/update',
     body: {
-      direction: direction
+      x: x,
+      y: y
     }
   });
 };

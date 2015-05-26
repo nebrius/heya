@@ -22,15 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-var LEFT_FORWARD = 180;
-var LEFT_FORWARD_SLOW = 92.5;
-var RIGHT_FORWARD = 0;
-var RIGHT_FORWARD_SLOW = 87.5;
-var LEFT_REVERSE = 0;
-var LEFT_REVERSE_SLOW = 87;
-var RIGHT_REVERSE = 180;
-var RIGHT_REVERSE_SLOW = 93;
-
 module.exports = PawelBot;
 
 function PawelBot(options) {
@@ -62,43 +53,26 @@ PawelBot.prototype.connect = function(cb) {
   }.bind(this));
 };
 
-PawelBot.prototype.move = function move(direction) {
-  switch(direction) {
-    case 'none':
-      this._leftServo.stop();
-      this._rightServo.stop();
-      break;
-    case 'up':
-      this._leftServo.to(LEFT_FORWARD);
-      this._rightServo.to(RIGHT_FORWARD);
-      break;
-    case 'upright':
-      this._leftServo.to(LEFT_FORWARD);
-      this._rightServo.to(RIGHT_FORWARD_SLOW);
-      break;
-    case 'right':
-      this._leftServo.to(LEFT_FORWARD);
-      this._rightServo.to(RIGHT_REVERSE);
-      break;
-    case 'downright':
-      this._leftServo.to(LEFT_REVERSE);
-      this._rightServo.to(RIGHT_REVERSE_SLOW);
-      break;
-    case 'down':
-      this._leftServo.to(LEFT_REVERSE);
-      this._rightServo.to(RIGHT_REVERSE);
-      break;
-    case 'downleft':
-      this._leftServo.to(LEFT_REVERSE_SLOW);
-      this._rightServo.to(RIGHT_REVERSE);
-      break;
-    case 'left':
-      this._leftServo.to(LEFT_REVERSE);
-      this._rightServo.to(RIGHT_FORWARD);
-      break;
-    case 'upleft':
-      this._leftServo.to(LEFT_FORWARD_SLOW);
-      this._rightServo.to(RIGHT_FORWARD);
-      break;
+PawelBot.prototype.move = function move(x, y) {
+  var leftSpeed;
+  var rightSpeed;
+  var normalizedAngle = 2 * Math.atan(y / x) / (Math.PI / 2);
+  if (Math.abs(x) < 0.1 && Math.abs(y) < 0.1) {
+    leftSpeed = 0;
+    rightSpeed = 0;
+  } else if (x >= 0 && y >= 0) {
+    leftSpeed = 1;
+    rightSpeed = 1 - normalizedAngle;
+  } else if (x < 0 && y >= 0) {
+    leftSpeed = -1 - normalizedAngle;
+    rightSpeed = 1;
+  } else if (x < 0 && y < 0) {
+    leftSpeed = -1;
+    rightSpeed = 1 - normalizedAngle;
+  } else if (x >= 0 && y < 0) {
+    leftSpeed = 1 + normalizedAngle;
+    rightSpeed = -1;
   }
+  this._leftServo.to(leftSpeed);
+  this._rightServo.to(rightSpeed);
 };
