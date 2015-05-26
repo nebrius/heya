@@ -73,6 +73,14 @@ PawelBot.prototype.move = function move(x, y) {
     leftSpeed = 1 + normalizedAngle;
     rightSpeed = -1;
   }
-  this._leftServo.to(leftSpeed);
-  this._rightServo.to(rightSpeed);
+  if (leftSpeed < 1) {
+    this._leftServo.cw(-leftSpeed);
+  } else {
+    this._leftServo.ccw(leftSpeed);
+  }
+  if (rightSpeed < 1) {
+    this._rightServo.ccw(-rightSpeed);
+  } else {
+    this._rightServo.cw(rightSpeed);
+  }
 };
