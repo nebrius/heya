@@ -25,25 +25,28 @@ THE SOFTWARE.
 module.exports = PawelBot;
 
 function PawelBot(options) {
-  this._options = options;
+  this._options = options || {};
 }
 
 PawelBot.prototype.connect = function(cb) {
   var five = require('johnny-five');
   var board = new five.Board({
     repl: false,
-    io: this._options.io
+    io: this._options.io,
+    id: 'pawel_bot'
   });
 
   board.on('ready', function() {
     this._leftServo = new five.Servo({
       pin: this._options.leftServo,
-      type: 'continuous'
+      type: 'continuous',
+      id: 'pawel_bot'
     });
 
     this._rightServo = new five.Servo({
       pin: this._options.rightServo,
-      type: 'continuous'
+      type: 'continuous',
+      id: 'pawel_bot'
     });
 
     this._leftServo.stop();
@@ -61,17 +64,17 @@ PawelBot.prototype.move = function move(x, y) {
     leftSpeed = 0;
     rightSpeed = 0;
   } else if (x >= 0 && y >= 0) {
-    leftSpeed = 1;
-    rightSpeed = 1 - normalizedAngle;
-  } else if (x < 0 && y >= 0) {
-    leftSpeed = -1 - normalizedAngle;
     rightSpeed = 1;
+    leftSpeed = 1 - normalizedAngle;
+  } else if (x < 0 && y >= 0) {
+    rightSpeed = -1 - normalizedAngle;
+    leftSpeed = 1;
   } else if (x < 0 && y < 0) {
-    leftSpeed = -1;
-    rightSpeed = 1 - normalizedAngle;
-  } else if (x >= 0 && y < 0) {
-    leftSpeed = 1 + normalizedAngle;
     rightSpeed = -1;
+    leftSpeed = 1 - normalizedAngle;
+  } else if (x >= 0 && y < 0) {
+    rightSpeed = 1 + normalizedAngle;
+    leftSpeed = -1;
   }
   if (leftSpeed < 1) {
     this._leftServo.cw(-leftSpeed);

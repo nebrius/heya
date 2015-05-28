@@ -29,7 +29,7 @@ var states = {};
 module.exports = PawelBot;
 
 function PawelBot(options) {
-  this._options = options;
+  this._options = options || {};
 }
 
 PawelBot.prototype.connect = function(cb) {

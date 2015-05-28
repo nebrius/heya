@@ -28,7 +28,7 @@ var util = require('util');
 module.exports = DigitalJoystick;
 
 function DigitalJoystick(options) {
-  this._options = options;
+  this._options = options || {};
 }
 util.inherits(DigitalJoystick, EventEmitter);
 
@@ -36,7 +36,8 @@ DigitalJoystick.prototype.connect = function connect(cb) {
   var five = require('johnny-five');
   var board = new five.Board({
     io: this._options.io,
-    repl: false
+    repl: false,
+    id: 'digital_joystick'
   });
 
   board.on('ready', function() {
@@ -64,31 +65,58 @@ DigitalJoystick.prototype.connect = function connect(cb) {
       var direction;
       switch (key) {
         case 0x00:
-          direction = 'none';
+          direction = {
+            x: 0,
+            y: 0
+          };
           break;
         case 0x01:
-          direction = 'up';
+          direction = {
+            x: 0,
+            y: 1
+          };
           break;
         case 0x03:
-          direction = 'upright';
+          direction = {
+            x: 0.707,
+            y: 0.707
+          };
           break;
         case 0x02:
-          direction = 'right';
+          direction = {
+            x: 1,
+            y: 0
+          };
           break;
         case 0x06:
-          direction = 'downright';
+          direction = {
+            x: 0.707,
+            y: -0.707
+          };
           break;
         case 0x04:
-          direction = 'down';
+          direction = {
+            x: 0,
+            y: -1
+          };
           break;
         case 0x0C:
-          direction = 'downleft';
+          direction = {
+            x: -0.707,
+            y: -0.707
+          };
           break;
         case 0x08:
-          direction = 'left';
+          direction = {
+            x: -1,
+            y: 0
+          };
           break;
         case 0x09:
-          direction = 'upleft';
+          direction = {
+            x: -0.707,
+            y: 0.707
+          };
           break;
       }
       if (direction) {
@@ -97,7 +125,10 @@ DigitalJoystick.prototype.connect = function connect(cb) {
     }.bind(this);
 
     function initPin(pin, name) {
-      var button = new five.Button(pin);
+      var button = new five.Button({
+        pin: pin,
+        id: 'digital_joystick'
+      });
       button.on('press', function() {
         state[name] = true;
         process();

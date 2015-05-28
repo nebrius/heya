@@ -29,7 +29,7 @@ var http = require('http');
 module.exports = WebKeyboard;
 
 function WebKeyboard(options) {
-  this._options = options;
+  this._options = options || {};
 }
 util.inherits(WebKeyboard, EventEmitter);
 
