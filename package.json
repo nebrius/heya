@@ -1,6 +1,6 @@
 {
   "name": "heya",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A platform for creating SumoBots",
   "main": "src/index.js",
   "scripts": {
@@ -17,6 +17,10 @@
     "robotics"
   ],
   "author": "Bryan Hughes <bryan@theoreticalideations.com>",
+  "contributors": [
+    { "name": "Bryan Hughes", "email": "bryan@theoreticalideations.com" },
+    { "name": "Joshua Holbrook", "email": "josh.holbrook@gmail.com" }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bryan-m-hughes/heya/issues"

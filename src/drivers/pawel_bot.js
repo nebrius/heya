@@ -64,17 +64,21 @@ PawelBot.prototype.move = function move(x, y) {
     leftSpeed = 0;
     rightSpeed = 0;
   } else if (x >= 0 && y >= 0) {
+    console.log('s1', normalizedAngle);
     rightSpeed = 1;
-    leftSpeed = 1 - normalizedAngle;
+    leftSpeed = -1 + normalizedAngle;
   } else if (x < 0 && y >= 0) {
+    console.log('s2', normalizedAngle);
     rightSpeed = -1 - normalizedAngle;
     leftSpeed = 1;
   } else if (x < 0 && y < 0) {
-    rightSpeed = -1;
-    leftSpeed = 1 - normalizedAngle;
-  } else if (x >= 0 && y < 0) {
-    rightSpeed = 1 + normalizedAngle;
+    console.log('s3', normalizedAngle);
     leftSpeed = -1;
+    rightSpeed = 1 - normalizedAngle;
+  } else if (x >= 0 && y < 0) {
+    console.log('s4', normalizedAngle);
+    leftSpeed = 1 + normalizedAngle;
+    rightSpeed = -1;
   }
   if (leftSpeed < 1) {
     this._leftServo.cw(-leftSpeed);
