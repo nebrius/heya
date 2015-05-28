@@ -42,16 +42,16 @@ WebKeyboard.prototype.connect = function connect(cb) {
       var x, y;
       switch(move[1]) {
         case 'up':
-          x = 1;
-          y = 0;
+          x = 0;
+          y = 1;
           break;
         case 'upright':
           x = 0.707;
           y = 0.707;
           break;
         case 'right':
-          x = 0;
-          y = 1;
+          x = 1;
+          y = 0;
           break;
         case 'downright':
           x = 0.707;
