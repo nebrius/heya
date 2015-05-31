@@ -22,74 +22,91 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-var EventEmitter = require('events').EventEmitter;
-var util = require('util');
-var http = require('http');
+import events from 'events';
+import fs from 'fs'
+import util from 'util';
+import http from 'http';
 
-module.exports = WebKeyboard;
+import { inputTypes } from '../../constants.js';
 
-function WebKeyboard(options) {
-  this._options = options || {};
-}
-util.inherits(WebKeyboard, EventEmitter);
+var xAxis = Symbol('xAxis');
+var yAxis = Symbol('yAxis');
+var options = Symbol('options');
 
-WebKeyboard.prototype.connect = function connect(cb) {
-  var webpage = require('fs').readFileSync(__dirname + '/control.html').toString();
-  http.createServer(function (req, res) {
-    var url = require('url').parse(req.url);
-    var move = url.path.match(/^\/move\/(.*)$/);
-    if (move) {
-      var x, y;
-      switch(move[1]) {
-        case 'up':
-          x = 0;
-          y = 1;
-          break;
-        case 'upright':
-          x = 0.707;
-          y = 0.707;
-          break;
-        case 'right':
-          x = 1;
-          y = 0;
-          break;
-        case 'downright':
-          x = 0.707;
-          y = -0.707;
-          break;
-        case 'down':
-          x = 0;
-          y = -1;
-          break;
-        case 'downleft':
-          x = -0.707;
-          y = -0.707;
-          break;
-        case 'left':
-          x = -1;
-          y = 0;
-          break;
-        case 'upleft':
-          x = -0.707;
-          y = 0.707;
-          break;
-        case 'none':
-          x = 0;
-          y = 0;
-          break;
-      }
-      this.emit('move', {
-        x: x,
-        y: y
-      });
-      res.end();
-    } else {
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.end(webpage);
+export class WebKeyboard {
+
+  constructor(opts = {}) {
+    this[options] = opts;
+
+    this[xAxis] = new events.EventEmitter();
+    this[yAxis] = new events.EventEmitter();
+    this[xAxis].type = this[yAxis].type = inputTypes.LINEAR;
+  }
+
+  getControllerAxes() {
+    return {
+      x: this[xAxis],
+      y: this[yAxis]
     }
-  }.bind(this)).listen(this._options.port || 8000, '127.0.0.1', function() {
-    cb();
-    console.log('Open your browser and point it to http://127.0.0.1:' +
-      (this._options.port || 8000) + ' to control the bot');
-  }.bind(this));
-};
+  }
+
+  connect(cb) {
+    var webpage = require('fs').readFileSync(__dirname + '/control.html').toString();
+    var port = this[options].port || 8000;
+    http.createServer((req, res) => {
+      var url = require('url').parse(req.url);
+      var move = url.path.match(/^\/move\/(.*)$/);
+      if (move) {
+        var x, y;
+        switch (move[1]) {
+          case 'up':
+            x = 0;
+            y = 1;
+            break;
+          case 'upright':
+            x = 0.707;
+            y = 0.707;
+            break;
+          case 'right':
+            x = 1;
+            y = 0;
+            break;
+          case 'downright':
+            x = 0.707;
+            y = -0.707;
+            break;
+          case 'down':
+            x = 0;
+            y = -1;
+            break;
+          case 'downleft':
+            x = -0.707;
+            y = -0.707;
+            break;
+          case 'left':
+            x = -1;
+            y = 0;
+            break;
+          case 'upleft':
+            x = -0.707;
+            y = 0.707;
+            break;
+          case 'none':
+            x = 0;
+            y = 0;
+            break;
+        }
+        this[xAxis].emit(move, x);
+        this[yAxis].emit(move, y);
+        res.end();
+      } else {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(webpage);
+      }
+    }).listen(port, '127.0.0.1', () => {
+      cb();
+      console.log('Open your browser and point it to http://127.0.0.1:' +
+        port + ' to control the bot');
+    });
+  }
+}
