@@ -1,6 +1,8 @@
 Heya
 ====
 
+[![Join the chat at https://gitter.im/bryan-m-hughes/heya](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bryan-m-hughes/heya?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 n. [Heya](https://en.wikipedia.org/wiki/Heya_%28sumo%29): In sumo wrestling, a heya (部屋) is an organization of sumo wrestlers where they train and live.
 
 Heya is a platform for quickly building sumobots. A Heya sumobot's software is split into two pieces: the controller and the driver. The controller takes input from some source and converts it into a common format. The driver then takes this normalized data and drives the motors.
