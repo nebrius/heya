@@ -22,19 +22,51 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-export var inputTypes = Object.freeze({
+import { inputTypes } from './constants.js';
 
-  // Types
-  BUTTON: 'BUTTON',
-  ANALOG_AXIS: 'ANALOG_AXIS',
+export function directionToAxes(direction) {
+  switch (direction) {
+    case inputTypes.UP:
+      x = 0;
+      y = 1;
+      break;
+    case inputTypes.UPRIGHT:
+      x = 0.707;
+      y = 0.707;
+      break;
+    case inputTypes.RIGHT:
+      x = 1;
+      y = 0;
+      break;
+    case inputTypes.DOWNRIGHT:
+      x = 0.707;
+      y = -0.707;
+      break;
+    case inputTypes.DOWN:
+      x = 0;
+      y = -1;
+      break;
+    case inputTypes.DOWNLEFT:
+      x = -0.707;
+      y = -0.707;
+      break;
+    case inputTypes.LEFT:
+      x = -1;
+      y = 0;
+      break;
+    case inputTypes.UPLEFT:
+      x = -0.707;
+      y = 0.707;
+      break;
+    case inputTypes.NONE:
+      x = 0;
+      y = 0;
+      break;
+  }
 
-  // Direction Constants
-  UP: 'UP',
-  UPRIGHT: 'UPRIGHT',
-  RIGHT: 'RIGHT',
-  DOWNRIGHT: 'DOWNRIGHT',
-  DOWN: 'DOWN',
-  DOWNLEFT: 'DOWNLEFT',
-  LEFT: 'LEFT',
-  UPLEFT: 'UPLEFT'
-});
+  return { x, y };
+}
+
+export function axesToDifferential(x, y) {
+
+}

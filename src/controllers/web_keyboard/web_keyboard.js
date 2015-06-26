@@ -27,10 +27,9 @@ import fs from 'fs'
 import util from 'util';
 import http from 'http';
 
+import { directionToAxes } from '../../utils.js';
 import { inputTypes } from '../../constants.js';
 
-var xAxis = Symbol('xAxis');
-var yAxis = Symbol('yAxis');
 var options = Symbol('options');
 
 export class WebKeyboard {
@@ -38,64 +37,24 @@ export class WebKeyboard {
   constructor(opts = {}) {
     this[options] = opts;
 
-    this[xAxis] = new events.EventEmitter();
-    this[yAxis] = new events.EventEmitter();
-    this[xAxis].type = this[yAxis].type = inputTypes.LINEAR;
+    this.x = new events.EventEmitter();
+    this.y = new events.EventEmitter();
+    this.x.type = this.y.type = inputTypes.ANALOG_AXIS;
+
+    this.defaults = {
+      x: this.x,
+      y: this.y
+    };
   }
 
-  getControllerAxes() {
-    return {
-      x: this[xAxis],
-      y: this[yAxis]
-    }
-  }
-
-  connect(cb) {
+  /*connect(cb) {
     var webpage = require('fs').readFileSync(__dirname + '/control.html').toString();
     var port = this[options].port || 8000;
     http.createServer((req, res) => {
       var url = require('url').parse(req.url);
       var move = url.path.match(/^\/move\/(.*)$/);
       if (move) {
-        var x, y;
-        switch (move[1]) {
-          case 'up':
-            x = 0;
-            y = 1;
-            break;
-          case 'upright':
-            x = 0.707;
-            y = 0.707;
-            break;
-          case 'right':
-            x = 1;
-            y = 0;
-            break;
-          case 'downright':
-            x = 0.707;
-            y = -0.707;
-            break;
-          case 'down':
-            x = 0;
-            y = -1;
-            break;
-          case 'downleft':
-            x = -0.707;
-            y = -0.707;
-            break;
-          case 'left':
-            x = -1;
-            y = 0;
-            break;
-          case 'upleft':
-            x = -0.707;
-            y = 0.707;
-            break;
-          case 'none':
-            x = 0;
-            y = 0;
-            break;
-        }
+        let { x, y } = directionToAxes(move);
         this[xAxis].emit(move, x);
         this[yAxis].emit(move, y);
         res.end();
@@ -103,10 +62,10 @@ export class WebKeyboard {
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.end(webpage);
       }
-    }).listen(port, '127.0.0.1', () => {
+    }).listen(port, 'localhost', () => {
       cb();
-      console.log('Open your browser and point it to http://127.0.0.1:' +
+      console.log('Open your browser and point it to http://localhost:' +
         port + ' to control the bot');
     });
-  }
+  }*/
 }

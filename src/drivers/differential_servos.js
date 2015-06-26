@@ -32,7 +32,7 @@ var move = Symbol('move');
 var options = Symbol('options');
 var connect = Symbol('connect');
 
-export class PawelBot {
+export class DifferentialServos {
 
   constructor(opts = {}) {
     this[options] = opts;
@@ -40,28 +40,36 @@ export class PawelBot {
       x: 0,
       y: 0
     };
-    this[xAxis] = {
+    this.x = {
       move: (value) => {
         this[currentPosition].x = value;
         this[move]();
       },
-      type: inputTypes.LINEAR,
+      type: inputTypes.ANALOG_AXIS,
       connect: this[connect]
     };
-    this[yAxis] = {
+    this.y = {
       move: (value) => {
         this[currentPosition].y = value;
         this[move]();
       },
-      type: inputTypes.LINEAR,
+      type: inputTypes.ANALOG_AXIS,
       connect: this[connect]
+    };
+    this.defaults = {
+      x: this.x,
+      y: this.y
     };
   }
 
-  getDriverAxes() {
+  getBotInputs() {
     return {
       x: this[xAxis],
-      y: this[yAxis]
+      y: this[yAxis],
+      defaults: {
+        x,
+        y
+      }
     }
   }
 
