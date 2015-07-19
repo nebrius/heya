@@ -22,13 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+import { types, inputTypes, outputTypes } from './constants.js';
 import { EventEmitter } from 'events';
 import async from 'async';
 import events from 'events';
 import 'es6-symbol/implement';
 
 export { WebKeyboard } from './controllers/web_keyboard/web_keyboard.js';
-export { DifferentialServos } from './drivers/differential_servos.js';
+export { DifferentialServos } from './drivers/differential_servos/differential_servos.js';
 
 let pairs = [];
 
@@ -43,44 +44,44 @@ export function connect(mapping, driver) {
   } else if (arguments.length != 1) {
     throw new Error('Invalid number of arguments passed to "connect"');
   }
-
   if (!Array.isArray(mapping)) {
     mapping = [ mapping ];
   }
-
-  // Go through each defined pair and map them together
-  mapping.forEach((pair) => {
-    let { input, output, filter = [] } = pair;
-    if (input.defaults && output.defaults) {
-      // Join the arrays together, sort them, then dedupe them
-      let keys = Object.keys(input.defaults).concat(Object.keys(output.defaults)).sort();
-      let dedupedKeys = [];
-      keys.forEach((key) => {
-        if (dedupedKeys.indexOf(key) == -1) {
-          dedupedKeys.push(key);
-        }
+  mapping.forEach(({ input, output, filters=[] }) => {
+    function connectPair(input, output, filters) {
+      input.source.on('change', (data) => {
+        output.respond(filters.reduce((data, filter) => {
+          return filter(data);
+        }, data));
       });
-      dedupedKeys.forEach((key) => {
-        if (input.defaults[key] && output.defaults[key]) {
-          pairs.push({
-            input: input.defaults[key],
-            output: output.defaults[key],
-            filter: filter
-          });
-        }
-      });
-    } else if (input.type && output.type) {
-      pairs.push({
-        input: input,
-        output: output,
-        filter: filter
-      });
+    }
+    if (input.type == types.CONTROLLER && output.type == types.DRIVER) {
+      // TODO: map controller and driver defaults
+    } else if (input.type && input.type == output.type) {
+      connectPair(input, output, filters);
     } else {
-      throw new Error('Mismatched input/output pair. Inputs and outputs must both be either a full controller/driver, or single axis');
+      throw new Error('Invalid input/output pair. Each pair must either be a controller and driver, or have the same source type');
     }
   });
 }
 
-export function run() {
-  console.log(pairs);
+export function run(cb) {
+  async.parallel(pairs.map(({ input, output, filters }) => {
+    return function(next) {
+      async.parallel([
+        (next) => { input.connect(next); },
+        (next) => { output.connect(next); }
+      ], (err) => {
+        if (err) {
+          next(err);
+          return;
+        }
+        input.on('move', (...args) => {
+          output.move(filters.reduce((currentData, filter) => {
+            return filter(...currentData);
+          }, args));
+        })
+      })
+    }
+  }), cb);
 }

@@ -26,6 +26,9 @@ var gulp = require('gulp');
 var babel = require('gulp-babel');
 var sourcemaps = require('gulp-sourcemaps');
 var del = require('del');
+var find = require('find');
+var async = require('async');
+var spawn = require('child_process').spawn;
 
 gulp.task('default', ['js', 'html', 'clean']);
 
@@ -46,4 +49,17 @@ gulp.task('html', ['clean'], function() {
 
 gulp.task('clean', function(cb) {
   del(['lib'], cb);
+});
+
+gulp.task('lint', function(cb) {
+  find.file(/\.js$/, 'src', function(files) {
+    var lintTasks = files.map(function (file) {
+      return function(next) {
+        spawn('eslint', [file], {
+          stdio: 'inherit'
+        }).on('close', next);
+      }
+    });
+    async.parallel(lintTasks, cb);
+  });
 });

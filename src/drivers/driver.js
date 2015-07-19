@@ -22,31 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-export let types = Object.freeze({
-  CONTROLLER: 'CONTROLLER',
-  DRIVER: 'DRIVER',
-  CONTROLLER_FILTER: 'CONTROLLER_FILTER',
-  INTERMEDIATE_FILTER: 'INTERMEDIATE_FILTER',
-  DRIVER_FILTER: 'DRIVER_FILTER',
-  DIGITAL: 'DIGITAL',
-  ANALOG: 'ANALOG'
-});
+import { types } from '../constants.js';
 
-export let inputTypes = Object.freeze({
-  DIGITAL_2D_DIRECTION: 'DIGITAL_2D_DIRECTION'
-});
+export function createDriver(definition) {
+  class Driver {
+    constructor() {
+      this.type = types.DRIVER;
+      this.outputs = {
+        directionA: {}
+      };
+    }
+  }
 
-export let outputTypes = Object.freeze({
-  ANALOG_2D_DIFFERENTIAL: 'ANALOG_2D_DIFFERENTIAL'
-});
-
-export let directions = Object.freeze({
-  UP: 'UP',
-  UPRIGHT: 'UPRIGHT',
-  RIGHT: 'RIGHT',
-  DOWNRIGHT: 'DOWNRIGHT',
-  DOWN: 'DOWN',
-  DOWNLEFT: 'DOWNLEFT',
-  LEFT: 'LEFT',
-  UPLEFT: 'UPLEFT'
-});
+  return Driver;
+}

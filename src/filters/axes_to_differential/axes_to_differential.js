@@ -22,44 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-var request = require('request');
+export function axesToDifferential(x, y) {
 
-var states = {};
-
-module.exports = PawelBot;
-
-function PawelBot(options) {
-  this._options = options || {};
 }
-
-PawelBot.prototype.connect = function(cb) {
-  console.log('Connecting to remote Pawel Bot...');
-  var tryRequest = function tryRequest() {
-    console.log(this._options.url + '/isReady');
-    request({
-      method: 'get',
-      json: true,
-      url: this._options.url + '/isReady'
-    }, function (error, response, body) {
-      if (!error) {
-        cb();
-      } else {
-        console.log('Could not connect to remote Pawel Bot, retrying...');
-        setTimeout(tryRequest, 500);
-      }
-    });
-  }.bind(this);
-  tryRequest();
-};
-
-PawelBot.prototype.move = function move(x, y) {
-  request({
-    method: 'post',
-    json: true,
-    url: this._options.url + '/update',
-    body: {
-      x: x,
-      y: y
-    }
-  });
-};

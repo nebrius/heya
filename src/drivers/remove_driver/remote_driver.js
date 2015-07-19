@@ -22,51 +22,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import { inputTypes } from './constants.js';
+import request from 'request';
 
-export function directionToAxes(direction) {
-  switch (direction) {
-    case inputTypes.UP:
-      x = 0;
-      y = 1;
-      break;
-    case inputTypes.UPRIGHT:
-      x = 0.707;
-      y = 0.707;
-      break;
-    case inputTypes.RIGHT:
-      x = 1;
-      y = 0;
-      break;
-    case inputTypes.DOWNRIGHT:
-      x = 0.707;
-      y = -0.707;
-      break;
-    case inputTypes.DOWN:
-      x = 0;
-      y = -1;
-      break;
-    case inputTypes.DOWNLEFT:
-      x = -0.707;
-      y = -0.707;
-      break;
-    case inputTypes.LEFT:
-      x = -1;
-      y = 0;
-      break;
-    case inputTypes.UPLEFT:
-      x = -0.707;
-      y = 0.707;
-      break;
-    case inputTypes.NONE:
-      x = 0;
-      y = 0;
-      break;
-  }
+let states = {};
 
-  return { x, y };
+module.exports = PawelBot;
+
+function PawelBot(options) {
+  this._options = options || {};
 }
 
-export function axesToDifferential(x, y) {
+PawelBot.prototype.connect = function(cb) {
+  console.log('Connecting to remote Pawel Bot...');
+  let tryRequest = function tryRequest() {
+    console.log(this._options.url + '/isReady');
+    request({
+      method: 'get',
+      json: true,
+      url: this._options.url + '/isReady'
+    }, function (error, response, body) {
+      if (!error) {
+        cb();
+      } else {
+        console.log('Could not connect to remote Pawel Bot, retrying...');
+        setTimeout(tryRequest, 500);
+      }
+    });
+  }.bind(this);
+  tryRequest();
+};
 
-}
+PawelBot.prototype.move = function move(x, y) {
+  request({
+    method: 'post',
+    json: true,
+    url: this._options.url + '/update',
+    body: {
+      x: x,
+      y: y
+    }
+  });
+};

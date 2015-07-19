@@ -22,48 +22,49 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import events from 'events';
-import fs from 'fs'
-import util from 'util';
-import http from 'http';
 import { inputTypes } from '../../constants.js';
-import { createController } from '../controller.js';
 
-const options = Symbol('options');
-const direction = Symbol('direction');
-
-export const WebKeyboard = createController({
-
-  name: 'WebKeyboard',
-
-  initialize(opts) {
-    this[options] = opts;
-
-    this[direction] = new events.EventEmitter();
-    this[direction].type = inputTypes.DIGITAL_2D_DIRECTION;
-
-    this.inputs = {
-      directionA: this[direction]
-    };
-  },
-
-  connect(cb) {
-    const webpage = fs.readFileSync(__dirname + '/control.html').toString();
-    const port = this[options].port || 8000;
-    http.createServer((req, res) => {
-      const url = require('url').parse(req.url);
-      const move = url.path.match(/^\/move\/(.*)$/);
-      if (move) {
-        this[direction].emit('change', move[1]);
-        res.end();
-      } else {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(webpage);
-      }
-    }).listen(port, 'localhost', () => {
-      console.log('Open your browser and point it to http://localhost:' +
-        port + ' to control the bot');
-      cb();
-    });
+export function directionToAxes(direction) {
+  let x, y;
+  switch (direction) {
+    case inputTypes.UP:
+      x = 0;
+      y = 1;
+      break;
+    case inputTypes.UPRIGHT:
+      x = 0.707;
+      y = 0.707;
+      break;
+    case inputTypes.RIGHT:
+      x = 1;
+      y = 0;
+      break;
+    case inputTypes.DOWNRIGHT:
+      x = 0.707;
+      y = -0.707;
+      break;
+    case inputTypes.DOWN:
+      x = 0;
+      y = -1;
+      break;
+    case inputTypes.DOWNLEFT:
+      x = -0.707;
+      y = -0.707;
+      break;
+    case inputTypes.LEFT:
+      x = -1;
+      y = 0;
+      break;
+    case inputTypes.UPLEFT:
+      x = -0.707;
+      y = 0.707;
+      break;
+    case inputTypes.NONE:
+      x = 0;
+      y = 0;
+      break;
   }
-});
+
+  console.log(x, y);
+  return { x, y };
+}
