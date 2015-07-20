@@ -22,10 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+import { createFilter } from '../filter.js';
 import { inputTypes } from '../../constants.js';
 
-export function directionToAxes(direction) {
-  let x, y;
+export const directionToAxes = createFilter(function directionToAxes(direction) {
+  let x;
+  let y;
   switch (direction) {
     case inputTypes.UP:
       x = 0;
@@ -63,8 +65,10 @@ export function directionToAxes(direction) {
       x = 0;
       y = 0;
       break;
+    default:
+      throw new Error('Invalid direction "' + direction + '"');
   }
 
   console.log(x, y);
   return { x, y };
-}
+});

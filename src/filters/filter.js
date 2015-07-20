@@ -22,6 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-export function createFilter(definition) {
+import logger from '../logging.js';
 
+export function createFilter(filter) {
+  return (...args) => {
+    const filteredData = filter(...args);
+    logger.debug(`Filtered ${args.join(',')} to ${filteredData.join(', ')}`);
+    return filteredData;
+  };
 }

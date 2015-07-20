@@ -22,19 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import { types, inputTypes, outputTypes } from './constants.js';
-import { EventEmitter } from 'events';
+import { types } from './constants.js';
+import logger from './logging.js';
 import async from 'async';
-import events from 'events';
 import 'es6-symbol/implement';
 
 export { WebKeyboard } from './controllers/web_keyboard/web_keyboard.js';
 export { DifferentialServos } from './drivers/differential_servos/differential_servos.js';
 
-let pairs = [];
+const bots = new Set();
 
 export function connect(mapping, driver) {
-
   // If two arguments were passed in, assume that they are a controller/driver pair
   if (arguments.length == 2) {
     mapping = {
@@ -47,14 +45,21 @@ export function connect(mapping, driver) {
   if (!Array.isArray(mapping)) {
     mapping = [ mapping ];
   }
+
+  // Helper method for connecting an input/output pair
+  function connectPair(input, output, filters) {
+    logger.debug(`Connecting ${input.name} in ${input.source.name} to ${output.name} in ${output.source.name}`);
+    input.source.on('change', (data) => {
+      output.respond(filters.reduce((filteredData, filter) => {
+        return filter(filteredData);
+      }, data));
+    });
+    bots.add(input.source);
+    bots.add(output.source);
+  }
+
+  // Loop through each input/output pair and map them
   mapping.forEach(({ input, output, filters=[] }) => {
-    function connectPair(input, output, filters) {
-      input.source.on('change', (data) => {
-        output.respond(filters.reduce((data, filter) => {
-          return filter(data);
-        }, data));
-      });
-    }
     if (input.type == types.CONTROLLER && output.type == types.DRIVER) {
       // TODO: map controller and driver defaults
     } else if (input.type && input.type == output.type) {
@@ -66,6 +71,8 @@ export function connect(mapping, driver) {
 }
 
 export function run(cb) {
+  logger.debug(`Connecting to ${bots.size} bots`);
+  return;
   async.parallel(pairs.map(({ input, output, filters }) => {
     return function(next) {
       async.parallel([
@@ -80,8 +87,8 @@ export function run(cb) {
           output.move(filters.reduce((currentData, filter) => {
             return filter(...currentData);
           }, args));
-        })
-      })
-    }
+        });
+      });
+    };
   }), cb);
 }

@@ -33,7 +33,9 @@ import events from 'events';
 //var options = Symbol('options');
 //var connect = Symbol('connect');
 
-export const DifferentialServos = createDriver({});
+export const DifferentialServos = createDriver({
+  name: 'DifferentialServos'
+});
 
 //export class DifferentialServos {
 //

@@ -24,14 +24,16 @@ THE SOFTWARE.
 
 import { EventEmitter } from 'events';
 import { types, inputTypes } from '../constants.js';
-import { directionToAxes } from '../filters/direction_to_axes/direction_to_axes.js'
+import { directionToAxes } from '../filters/direction_to_axes/direction_to_axes.js';
+import logger from '../logging.js';
 
 const handleDigital2DDirection = Symbol('handleDigital2DDirection');
 
 export function createController(spec) {
-  if (typeof spec.initialize != 'function' ||  typeof spec.connect != 'function') {
+  if (typeof spec.initialize != 'function' || typeof spec.connect != 'function') {
     throw new Error('Invalid controller definition');
   }
+  logger.debug(`Creating controller ${spec.name}`);
 
   class Controller extends EventEmitter {
 
@@ -43,19 +45,21 @@ export function createController(spec) {
 
       this.type = types.CONTROLLER;
       this.inputs = {};
+      this.name = spec.name;
 
       const inputs = spec.inputs;
       if (!inputs || typeof inputs != 'object') {
-        throw new Error('Invalid inputs for ' + (spec.name || 'unnamed controller'));
+        throw new Error(`Invalid inputs for ${spec.name || 'unnamed controller'}`);
       }
-      for (let input in inputs) {
+      let input; // eslint and babel disagree on whether to use let or const inline in the for...in
+      for (input in inputs) {
         if (inputs.hasOwnProperty(input)) {
           switch (inputs[input].type) {
             case inputTypes.DIGITAL_2D_DIRECTION:
-              this[handleDigital2DDirection](input, inputs[input]);
+              this[handleDigital2DDirection](input, inputs[input], spec);
               break;
             default:
-              throw new Error('Unknown controller input type "' + inputs[input].type + '"');
+              throw new Error(`Unknown controller input type ${inputs[input].type}"`);
           }
         }
       }
@@ -65,7 +69,8 @@ export function createController(spec) {
       spec.connect();
     }
 
-    [handleDigital2DDirection](name, input) {
+    [handleDigital2DDirection](name, input, spec) {
+      logger.debug(`Wiring up digital 2D direction for controller ${spec.name}`);
       this.inputs[name] = {
         x: {
           name: name + '_x',
@@ -79,6 +84,7 @@ export function createController(spec) {
         }
       };
       input.on('change', (direction) => {
+        logger.debug(`Digital 2D direction value changed to ${direction} from controller ${spec.name}`);
         const { x, y } = directionToAxes(direction);
         this.emit('change', [{
           source: name + '_x',

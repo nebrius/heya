@@ -1,3 +1,4 @@
+global.HEYA_DEBUG_LOGGING = true;
 var heya = require('./lib/index.js');
 
 var controller = new heya.WebKeyboard();
@@ -23,7 +24,6 @@ for the forms that don't explicitly define everything
  */
 
 // Form 1
-//heya.connect(controller, bot);
 
 // Form 2
 heya.connect([{

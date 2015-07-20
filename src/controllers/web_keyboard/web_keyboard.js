@@ -23,9 +23,9 @@ THE SOFTWARE.
 */
 
 import events from 'events';
-import fs from 'fs'
-import util from 'util';
+import fs from 'fs';
 import http from 'http';
+import path from 'path';
 import { inputTypes } from '../../constants.js';
 import { createController } from '../controller.js';
 
@@ -48,7 +48,7 @@ export const WebKeyboard = createController({
   },
 
   connect(cb) {
-    const webpage = fs.readFileSync(__dirname + '/control.html').toString();
+    const webpage = fs.readFileSync(path.join(__dirname, 'control.html')).toString();
     const port = this[options].port || 8000;
     http.createServer((req, res) => {
       const url = require('url').parse(req.url);

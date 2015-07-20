@@ -22,28 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import { types } from '../constants.js';
+import Logger from 'transport-logger';
 
-export function createDriver(definition) {
-  class Driver {
-    constructor() {
-      this.type = types.DRIVER;
-      this.outputs = {
-        directionA: {
-          x: {
-            name: definition.name + '_x',
-            type: types.ANALOG,
-            source: definition
-          },
-          y: {
-            name: definition.name + '_y',
-            type: types.ANALOG,
-            source: definition
-          }
-        }
-      };
-    }
-  }
-
-  return Driver;
-}
+export default new Logger({
+  minLevel: global.HEYA_DEBUG_LOGGING ? 'trace' : 'info',
+  colorize: true,
+  prependLevel: true
+});

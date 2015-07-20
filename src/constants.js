@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-export let types = Object.freeze({
+export const types = Object.freeze({
   CONTROLLER: 'CONTROLLER',
   DRIVER: 'DRIVER',
   CONTROLLER_FILTER: 'CONTROLLER_FILTER',
@@ -32,15 +32,15 @@ export let types = Object.freeze({
   ANALOG: 'ANALOG'
 });
 
-export let inputTypes = Object.freeze({
+export const inputTypes = Object.freeze({
   DIGITAL_2D_DIRECTION: 'DIGITAL_2D_DIRECTION'
 });
 
-export let outputTypes = Object.freeze({
+export const outputTypes = Object.freeze({
   ANALOG_2D_DIFFERENTIAL: 'ANALOG_2D_DIFFERENTIAL'
 });
 
-export let directions = Object.freeze({
+export const directions = Object.freeze({
   UP: 'UP',
   UPRIGHT: 'UPRIGHT',
   RIGHT: 'RIGHT',

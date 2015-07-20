@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bryan-m-hughes/heya.git"
+    "url": "git+https://github.com/nebrius/heya.git"
   },
   "keywords": [
     "johnny-five",
@@ -29,11 +29,11 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bryan-m-hughes/heya/issues"
+    "url": "https://github.com/nebrius/heya/issues"
   },
-  "homepage": "https://github.com/bryan-m-hughes/heya#readme",
+  "homepage": "https://github.com/nebrius/heya#readme",
   "dependencies": {
-    "async": "^1.2.1",
+    "async": "^1.4.0",
     "es-symbol": "^1.1.2",
     "es6-symbol": "^2.0.1",
     "johnny-five": "^0.8.76",
@@ -41,7 +41,6 @@
   },
   "devDependencies": {
     "del": "^1.2.0",
-    "find": "^0.2.3",
     "gulp": "^3.9.0",
     "gulp-babel": "^4.0.1",
     "gulp-sourcemaps": "^1.5.2"
