@@ -28,6 +28,7 @@ import http from 'http';
 import path from 'path';
 import { inputTypes } from '../../constants.js';
 import { createController } from '../controller.js';
+import logger from '../../logging.js';
 
 const options = Symbol('options');
 const direction = Symbol('direction');
@@ -61,8 +62,7 @@ export const WebKeyboard = createController({
         res.end(webpage);
       }
     }).listen(port, 'localhost', () => {
-      console.log('Open your browser and point it to http://localhost:' +
-        port + ' to control the bot');
+      logger.info(`Open your browser and point it to http://localhost:${port} to control the bot`);
       cb();
     });
   }

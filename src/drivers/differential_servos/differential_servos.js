@@ -24,122 +24,68 @@ THE SOFTWARE.
 
 import { outputTypes } from '../../constants.js';
 import { createDriver } from '../driver.js';
+import five from 'johnny-five';
+
+const options = Symbol('options');
+const direction = Symbol('direction');
+const leftServo = Symbol('leftServo');
+const rightServo = Symbol('rightServo');
+
+let idCounter = 1;
 
 export const DifferentialServos = createDriver({
 
   name: 'DifferentialServos',
 
   initialize(opts) {
+    this[options] = opts;
 
+    this[direction] = {
+      type: outputTypes.ANALOG_2D_DIFFERENTIAL,
+      respond(left, right) {
+        if (left < 1) {
+          this[leftServo].cw(-left);
+        } else {
+          this[leftServo].ccw(left);
+        }
+        if (right < 1) {
+          this[rightServo].ccw(-right);
+        } else {
+          this[rightServo].cw(right);
+        }
+      }
+    };
+
+    this.outputs = {
+      directionA: this[direction]
+    };
   },
 
   connect(cb) {
-    process.nextTick(cb);
+    const id = `differential_servos_${idCounter++}}`;
+    const board = new five.Board({
+      repl: false,
+      io: this[options].io,
+      id
+    });
+
+    board.on('ready', () => {
+      this[leftServo] = new five.Servo({
+        pin: this[options].leftServo,
+        type: 'continuous',
+        id
+      });
+
+      this[rightServo] = new five.Servo({
+        pin: this[options].rightServo,
+        type: 'continuous',
+        id
+      });
+
+      this[leftServo].stop();
+      this[rightServo].stop();
+
+      cb();
+    });
   }
 });
-
-//var xAxis = Symbol('xAxis');
-//var yAxis = Symbol('yAxis');
-//var currentPosition = Symbol('currentPosition');
-//var move = Symbol('move');
-//var options = Symbol('options');
-//var connect = Symbol('connect');
-
-//export class DifferentialServos {
-//
-//  constructor(opts = {}) {
-//    this[options] = opts;
-//    this[currentPosition] = {
-//      x: 0,
-//      y: 0
-//    };
-//    this.motors = {
-//      move: (...args) => {
-//        console.log(args)
-//      },
-//      type: outputTypes.ANALOG_2D_DIFFERENTIAL,
-//      connect: this[connect]
-//    };
-//    this.defaults = {
-//      movement: this.motors
-//    };
-//  }
-//
-//  getBotInputs() {
-//    return {
-//      x: this[xAxis],
-//      y: this[yAxis],
-//      defaults: {
-//        x,
-//        y
-//      }
-//    }
-//  }
-//
-//  [connect](cb) {
-//    cb();
-//  }
-//
-//  [move]() {
-//    var leftSpeed;
-//    var rightSpeed;
-//    var { x, y } = this[currentPosition];
-//    var normalizedAngle = 2 * Math.atan(y / x) / (Math.PI / 2);
-//    if (Math.abs(x) < 0.1 && Math.abs(y) < 0.1) {
-//      leftSpeed = 0;
-//      rightSpeed = 0;
-//    } else if (x >= 0 && y >= 0) {
-//      rightSpeed = 1;
-//      leftSpeed = -1 + normalizedAngle;
-//    } else if (x < 0 && y >= 0) {
-//      rightSpeed = -1 - normalizedAngle;
-//      leftSpeed = 1;
-//    } else if (x < 0 && y < 0) {
-//      leftSpeed = -1;
-//      rightSpeed = 1 - normalizedAngle;
-//    } else if (x >= 0 && y < 0) {
-//      leftSpeed = 1 + normalizedAngle;
-//      rightSpeed = -1;
-//    }
-//    if (leftSpeed < 1) {
-//      this._leftServo.cw(-leftSpeed);
-//    } else {
-//      this._leftServo.ccw(leftSpeed);
-//    }
-//    if (rightSpeed < 1) {
-//      this._rightServo.ccw(-rightSpeed);
-//    } else {
-//      this._rightServo.cw(rightSpeed);
-//    }
-//  }
-//}
-
-/*
-PawelBot.prototype.connect = function(cb) {
-  var five = require('johnny-five');
-  var board = new five.Board({
-    repl: false,
-    io: this._options.io,
-    id: 'pawel_bot'
-  });
-
-  board.on('ready', function() {
-    this._leftServo = new five.Servo({
-      pin: this._options.leftServo,
-      type: 'continuous',
-      id: 'pawel_bot'
-    });
-
-    this._rightServo = new five.Servo({
-      pin: this._options.rightServo,
-      type: 'continuous',
-      id: 'pawel_bot'
-    });
-
-    this._leftServo.stop();
-    this._rightServo.stop();
-
-    cb();
-  }.bind(this));
-};
-*/

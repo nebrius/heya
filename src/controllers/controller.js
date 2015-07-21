@@ -37,8 +37,6 @@ export function createController(spec) {
 
   class Controller extends EventEmitter {
 
-    // Initializes the controller. This calls the definition's initialization
-    // method, which is supposed to create the inputs object
     constructor(...opts) {
       super();
       spec.initialize(...opts);

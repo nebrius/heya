@@ -25,7 +25,7 @@ THE SOFTWARE.
 import Logger from 'transport-logger';
 
 export default new Logger({
-  minLevel: global.HEYA_DEBUG_LOGGING ? 'trace' : 'info',
+  minLevel: process.env.HEYA_DEBUG_LOGGING ? 'trace' : 'info',
   colorize: true,
   prependLevel: true
 });

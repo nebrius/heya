@@ -72,5 +72,8 @@ export function connect(mapping, driver) {
 
 export function run(cb) {
   logger.debug(`Connecting to ${bots.size} bots`);
-  async.parallel(Array.from(bots).map((bot) => (next) => bot.connect(next)), cb);
+  async.parallel(Array.from(bots).map((bot) => (next) => bot.connect(next)), () => {
+    logger.debug('All bots connected');
+    cb();
+  });
 }

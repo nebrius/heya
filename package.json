@@ -35,7 +35,7 @@
   "dependencies": {
     "async": "^1.4.0",
     "babel": "^5.6.23",
-    "johnny-five": "^0.8.76",
+    "johnny-five": "^0.8.85",
     "request": "^2.55.0",
     "transport-logger": "^1.0.0"
   },

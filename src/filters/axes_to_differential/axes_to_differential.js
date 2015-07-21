@@ -23,5 +23,27 @@ THE SOFTWARE.
 */
 
 export function axesToDifferential(x, y) {
-
+  let left;
+  let right;
+  const normalizedAngle = 2 * Math.atan(y / x) / (Math.PI / 2);
+  if (Math.abs(x) < 0.1 && Math.abs(y) < 0.1) {
+    left = 0;
+    right = 0;
+  } else if (x >= 0 && y >= 0) {
+    right = 1;
+    left = -1 + normalizedAngle;
+  } else if (x < 0 && y >= 0) {
+    right = -1 - normalizedAngle;
+    left = 1;
+  } else if (x < 0 && y < 0) {
+    left = -1;
+    right = 1 - normalizedAngle;
+  } else if (x >= 0 && y < 0) {
+    left = 1 + normalizedAngle;
+    right = -1;
+  }
+  return {
+    left,
+    right
+  };
 }

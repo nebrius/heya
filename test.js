@@ -1,4 +1,5 @@
-global.HEYA_DEBUG_LOGGING = true;
+process.env.HEYA_DEBUG_LOGGING = true;
+process.env.IS_TEST_MODE = true;
 var heya = require('./lib/index.js');
 
 var controller = new heya.WebKeyboard();
@@ -28,10 +29,10 @@ for the forms that don't explicitly define everything
 // Form 2
 heya.connect([{
   input: controller.inputs.directionA.x,
-  output: bot.outputs.directionA.x
+  output: bot.outputs.directionA.left
 }, {
   input: controller.inputs.directionA.y,
-  output: bot.outputs.directionA.y
+  output: bot.outputs.directionA.right
 }]);
 
 //// or
