@@ -65,8 +65,8 @@ export function createController(spec) {
       }
     }
 
-    connect() {
-      spec.connect();
+    connect(cb) {
+      spec.connect(cb);
     }
 
     [handleDigital2DDirection](name, input, spec) {

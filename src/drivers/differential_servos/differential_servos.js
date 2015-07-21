@@ -24,7 +24,19 @@ THE SOFTWARE.
 
 import { outputTypes } from '../../constants.js';
 import { createDriver } from '../driver.js';
-import events from 'events';
+
+export const DifferentialServos = createDriver({
+
+  name: 'DifferentialServos',
+
+  initialize(opts) {
+
+  },
+
+  connect(cb) {
+    process.nextTick(cb);
+  }
+});
 
 //var xAxis = Symbol('xAxis');
 //var yAxis = Symbol('yAxis');
@@ -32,10 +44,6 @@ import events from 'events';
 //var move = Symbol('move');
 //var options = Symbol('options');
 //var connect = Symbol('connect');
-
-export const DifferentialServos = createDriver({
-  name: 'DifferentialServos'
-});
 
 //export class DifferentialServos {
 //

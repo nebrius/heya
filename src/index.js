@@ -22,10 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+import 'es6-symbol/implement';
 import { types } from './constants.js';
 import logger from './logging.js';
 import async from 'async';
-import 'es6-symbol/implement';
 
 export { WebKeyboard } from './controllers/web_keyboard/web_keyboard.js';
 export { DifferentialServos } from './drivers/differential_servos/differential_servos.js';
@@ -72,23 +72,9 @@ export function connect(mapping, driver) {
 
 export function run(cb) {
   logger.debug(`Connecting to ${bots.size} bots`);
-  return;
-  async.parallel(pairs.map(({ input, output, filters }) => {
-    return function(next) {
-      async.parallel([
-        (next) => { input.connect(next); },
-        (next) => { output.connect(next); }
-      ], (err) => {
-        if (err) {
-          next(err);
-          return;
-        }
-        input.on('move', (...args) => {
-          output.move(filters.reduce((currentData, filter) => {
-            return filter(...currentData);
-          }, args));
-        });
-      });
-    };
-  }), cb);
+  const tasks = [];
+  bots.forEach((bot) => {
+    tasks.push((next) => bot.connect(next));
+  });
+  async.parallel(tasks, cb);
 }

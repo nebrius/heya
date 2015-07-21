@@ -36,7 +36,7 @@ export const WebKeyboard = createController({
 
   name: 'WebKeyboard',
 
-  initialize(opts) {
+  initialize(opts = {}) {
     this[options] = opts;
 
     this[direction] = new events.EventEmitter();
@@ -48,6 +48,7 @@ export const WebKeyboard = createController({
   },
 
   connect(cb) {
+    debugger;
     const webpage = fs.readFileSync(path.join(__dirname, 'control.html')).toString();
     const port = this[options].port || 8000;
     http.createServer((req, res) => {

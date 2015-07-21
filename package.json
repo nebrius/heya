@@ -34,7 +34,6 @@
   "homepage": "https://github.com/nebrius/heya#readme",
   "dependencies": {
     "async": "^1.4.0",
-    "es-symbol": "^1.1.2",
     "es6-symbol": "^2.0.1",
     "johnny-five": "^0.8.76",
     "request": "^2.55.0"
