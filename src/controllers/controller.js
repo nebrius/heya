@@ -56,7 +56,7 @@ export function createController(spec) {
         if (inputs.hasOwnProperty(input)) {
           switch (inputs[input].type) {
             case inputTypes.DIGITAL_2D_DIRECTION:
-              this[handleDigital2DDirection](input, inputs[input], spec);
+              this[handleDigital2DDirection](input, inputs[input]);
               break;
             default:
               throw new Error(`Unknown controller input type ${inputs[input].type}"`);
@@ -69,30 +69,27 @@ export function createController(spec) {
       spec.connect(cb);
     }
 
-    [handleDigital2DDirection](name, input, spec) {
+    [handleDigital2DDirection](name, input) {
       logger.debug(`Wiring up digital 2D direction for controller ${spec.name}`);
+      const xEmitter = Object.assign(new EventEmitter(), {
+        name: name + '_x',
+        type: types.ANALOG,
+        source: this
+      });
+      const yEmitter = Object.assign(new EventEmitter(), {
+        name: name + '_y',
+        type: types.ANALOG,
+        source: this
+      });
       this.inputs[name] = {
-        x: {
-          name: name + '_x',
-          type: types.ANALOG,
-          source: this
-        },
-        y: {
-          name: name + '_y',
-          type: types.ANALOG,
-          source: this
-        }
+        x: xEmitter,
+        y: yEmitter
       };
       input.on('change', (direction) => {
         logger.debug(`Digital 2D direction value changed to ${direction} from controller ${spec.name}`);
         const { x, y } = directionToAxes(direction);
-        this.emit('change', [{
-          source: name + '_x',
-          value: x
-        }, {
-          source: name + '_y',
-          value: y
-        }]);
+        xEmitter.emit('change', x);
+        yEmitter.emit('change', y);
       });
     }
   }

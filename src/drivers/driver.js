@@ -33,12 +33,18 @@ export function createDriver(definition) {
           x: {
             name: definition.name + '_x',
             type: types.ANALOG,
-            source: definition
+            source: definition,
+            respond: (data) => {
+              console.log('x', data);
+            }
           },
           y: {
             name: definition.name + '_y',
             type: types.ANALOG,
-            source: definition
+            source: definition,
+            respond: (data) => {
+              console.log('x', data);
+            }
           }
         }
       };

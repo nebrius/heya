@@ -23,52 +23,50 @@ THE SOFTWARE.
 */
 
 import { createFilter } from '../filter.js';
-import { inputTypes } from '../../constants.js';
+import { directions } from '../../constants.js';
 
 export const directionToAxes = createFilter(function directionToAxes(direction) {
   let x;
   let y;
   switch (direction) {
-    case inputTypes.UP:
+    case directions.UP:
       x = 0;
       y = 1;
       break;
-    case inputTypes.UPRIGHT:
+    case directions.UPRIGHT:
       x = 0.707;
       y = 0.707;
       break;
-    case inputTypes.RIGHT:
+    case directions.RIGHT:
       x = 1;
       y = 0;
       break;
-    case inputTypes.DOWNRIGHT:
+    case directions.DOWNRIGHT:
       x = 0.707;
       y = -0.707;
       break;
-    case inputTypes.DOWN:
+    case directions.DOWN:
       x = 0;
       y = -1;
       break;
-    case inputTypes.DOWNLEFT:
+    case directions.DOWNLEFT:
       x = -0.707;
       y = -0.707;
       break;
-    case inputTypes.LEFT:
+    case directions.LEFT:
       x = -1;
       y = 0;
       break;
-    case inputTypes.UPLEFT:
+    case directions.UPLEFT:
       x = -0.707;
       y = 0.707;
       break;
-    case inputTypes.NONE:
+    case directions.NONE:
       x = 0;
       y = 0;
       break;
     default:
       throw new Error('Invalid direction "' + direction + '"');
   }
-
-  console.log(x, y);
   return { x, y };
 });

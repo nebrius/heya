@@ -48,5 +48,6 @@ export const directions = Object.freeze({
   DOWN: 'DOWN',
   DOWNLEFT: 'DOWNLEFT',
   LEFT: 'LEFT',
-  UPLEFT: 'UPLEFT'
+  UPLEFT: 'UPLEFT',
+  NONE: 'NONE'
 });

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import 'es6-symbol/implement';
+import 'babel/polyfill';
 import { types } from './constants.js';
 import logger from './logging.js';
 import async from 'async';
@@ -49,7 +49,7 @@ export function connect(mapping, driver) {
   // Helper method for connecting an input/output pair
   function connectPair(input, output, filters) {
     logger.debug(`Connecting ${input.name} in ${input.source.name} to ${output.name} in ${output.source.name}`);
-    input.source.on('change', (data) => {
+    input.on('change', (data) => {
       output.respond(filters.reduce((filteredData, filter) => {
         return filter(filteredData);
       }, data));
@@ -72,9 +72,5 @@ export function connect(mapping, driver) {
 
 export function run(cb) {
   logger.debug(`Connecting to ${bots.size} bots`);
-  const tasks = [];
-  bots.forEach((bot) => {
-    tasks.push((next) => bot.connect(next));
-  });
-  async.parallel(tasks, cb);
+  async.parallel(Array.from(bots).map((bot) => (next) => bot.connect(next)), cb);
 }
