@@ -27,7 +27,7 @@ import { createDriver } from '../driver.js';
 import five from 'johnny-five';
 
 const options = Symbol('options');
-const direction = Symbol('direction');
+const wheels = Symbol('direction');
 const leftServo = Symbol('leftServo');
 const rightServo = Symbol('rightServo');
 
@@ -40,28 +40,31 @@ export const DifferentialServos = createDriver({
   initialize(opts) {
     this[options] = opts;
 
-    this[direction] = {
+    this[wheels] = {
       type: outputTypes.ANALOG_2D_DIFFERENTIAL,
       respond(left, right) {
-        if (left < 1) {
-          this[leftServo].cw(-left);
-        } else {
-          this[leftServo].ccw(left);
-        }
-        if (right < 1) {
-          this[rightServo].ccw(-right);
-        } else {
-          this[rightServo].cw(right);
-        }
+        console.log(left, right);
+        //if (left < 1) {
+        //  this[leftServo].cw(-left);
+        //} else {
+        //  this[leftServo].ccw(left);
+        //}
+        //if (right < 1) {
+        //  this[rightServo].ccw(-right);
+        //} else {
+        //  this[rightServo].cw(right);
+        //}
       }
     };
 
     this.outputs = {
-      directionA: this[direction]
+      wheels: this[wheels]
     };
   },
 
   connect(cb) {
+    cb();
+    return;
     const id = `differential_servos_${idCounter++}}`;
     const board = new five.Board({
       repl: false,

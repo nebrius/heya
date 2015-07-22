@@ -44,7 +44,12 @@ export const WebKeyboard = createController({
     this[direction].type = inputTypes.DIGITAL_2D_DIRECTION;
 
     this.inputs = {
-      directionA: this[direction]
+      direction: this[direction]
+    };
+
+    this.defaults = {
+      axes: [ 'direction' ],
+      buttons: []
     };
   },
 

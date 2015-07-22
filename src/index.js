@@ -61,7 +61,7 @@ export function connect(mapping, driver) {
   // Loop through each input/output pair and map them
   mapping.forEach(({ input, output, filters=[] }) => {
     if (input.type == types.CONTROLLER && output.type == types.DRIVER) {
-      // TODO: map controller and driver defaults
+      throw new Error('Support for mapping default controller inputs to driver outputs is not yet supported');
     } else if (input.type && input.type == output.type) {
       connectPair(input, output, filters);
     } else {

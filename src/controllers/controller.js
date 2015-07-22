@@ -79,12 +79,12 @@ export function createController(spec) {
         type: types.ANALOG,
         source: this
       });
-      this.inputs[name] = {
+      this[name] = {
         x: xEmitter,
         y: yEmitter
       };
       input.on('change', (direction) => {
-        logger.debug(`Digital 2D direction value changed to ${direction} from controller ${spec.name}`);
+        logger.debug(`Controller ${spec.name} emitted digital 2D direction value ${direction}`);
         const { x, y } = directionToAxes(direction);
         xEmitter.emit('change', x);
         yEmitter.emit('change', y);

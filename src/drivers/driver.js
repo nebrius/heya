@@ -75,8 +75,8 @@ export function createDriver(spec) {
           isResponding = true;
           setImmediate(() => {
             isResponding = false;
-            logger.debug(`Analog 2D differential value changed to (${xValue},${yValue}) to driver ${spec.name}`);
             const { left, right } = axesToDifferential(xValue, yValue);
+            logger.debug(`Driver ${spec.name} responded to analog 2D differential value (${xValue},${yValue})`);
             output.respond(left, right);
           });
         }
@@ -100,7 +100,7 @@ export function createDriver(spec) {
           respond();
         }
       };
-      this.outputs[name] = {
+      this[name] = {
         left: leftOutput,
         right: rightOutput
       };

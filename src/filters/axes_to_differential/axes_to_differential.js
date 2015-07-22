@@ -22,7 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-export function axesToDifferential(x, y) {
+import { createFilter } from '../filter.js';
+
+export const axesToDifferential = createFilter(function axesToDifferential(x, y) {
   let left;
   let right;
   const normalizedAngle = 2 * Math.atan(y / x) / (Math.PI / 2);
@@ -46,4 +48,4 @@ export function axesToDifferential(x, y) {
     left,
     right
   };
-}
+});

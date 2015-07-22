@@ -25,14 +25,18 @@ for the forms that don't explicitly define everything
  */
 
 // Form 1
+//heya.connect({
+//  input: controller,
+//  output: bot
+//});
 
 // Form 2
 heya.connect([{
-  input: controller.inputs.directionA.x,
-  output: bot.outputs.directionA.left
+  input: controller.direction.x,
+  output: bot.wheels.left
 }, {
-  input: controller.inputs.directionA.y,
-  output: bot.outputs.directionA.right
+  input: controller.direction.y,
+  output: bot.wheels.right
 }]);
 
 //// or

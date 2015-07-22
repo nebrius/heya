@@ -33,10 +33,13 @@ export const types = Object.freeze({
 });
 
 export const inputTypes = Object.freeze({
-  DIGITAL_2D_DIRECTION: 'DIGITAL_2D_DIRECTION'
+  BINARY_STATE: 'BINARY_STATE',
+  DIGITAL_2D_DIRECTION: 'DIGITAL_2D_DIRECTION',
+  ANALOG_2D_DIRECTION: 'ANALOG_2D_DIRECTION'
 });
 
 export const outputTypes = Object.freeze({
+  BINARY_STATE: 'BINARY_STATE',
   ANALOG_2D_DIFFERENTIAL: 'ANALOG_2D_DIFFERENTIAL'
 });
 
