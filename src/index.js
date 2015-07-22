@@ -23,9 +23,10 @@ THE SOFTWARE.
 */
 
 import 'babel/polyfill';
+import async from 'async';
 import { types } from './constants.js';
 import logger from './logging.js';
-import async from 'async';
+import invertAxis from './filters/invert_axis/invert_axis.js';
 
 export { WebKeyboard } from './controllers/web_keyboard/web_keyboard.js';
 export { DifferentialServos } from './drivers/differential_servos/differential_servos.js';
@@ -59,7 +60,10 @@ export function connect(mapping, driver) {
   }
 
   // Loop through each input/output pair and map them
-  mapping.forEach(({ input, output, filters=[] }) => {
+  mapping.forEach(({ input, output, isInverted, filters=[] }) => {
+    if (isInverted) {
+      filters.unshift(invertAxis);
+    }
     if (input.type == types.CONTROLLER && output.type == types.DRIVER) {
       throw new Error('Support for mapping default controller inputs to driver outputs is not yet supported');
     } else if (input.type && input.type == output.type) {

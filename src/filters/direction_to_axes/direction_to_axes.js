@@ -25,7 +25,7 @@ THE SOFTWARE.
 import { createFilter } from '../filter.js';
 import { directions } from '../../constants.js';
 
-export const directionToAxes = createFilter(function directionToAxes(direction) {
+export default createFilter((direction) => {
   let x;
   let y;
   switch (direction) {

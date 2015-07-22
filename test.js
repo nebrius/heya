@@ -25,12 +25,6 @@ for the forms that don't explicitly define everything
  */
 
 // Form 1
-//heya.connect({
-//  input: controller,
-//  output: bot
-//});
-
-// Form 2
 heya.connect([{
   input: controller.direction.x,
   output: bot.wheels.left
@@ -39,49 +33,26 @@ heya.connect([{
   output: bot.wheels.right
 }]);
 
-//// or
+// or
 
 //heya.connect({
-//  input: {
-//    controller: controller,
-//    source: 'x'
-//  },
-//  output: {
-//    driver: bot,
-//    destination: 'x'
-//  }
+//  input: controller.direction.x,
+//  output: bot.wheels.left
 //});
 //heya.connect({
-//  input: {
-//    controller: controller,
-//    source: 'y'
-//  },
-//  output: {
-//    driver: bot,
-//    destination: 'y'
-//  }
+//  input: controller.direction.y,
+//  output: bot.wheels.right
 //});
-//
-//
-//// Form 3
+
+// Form 2
 //heya.connect([{
-//  input: {
-//    source: controller.x,
-//    isInverted: true
-//  },
-//  output: {
-//    source: bot.x,
-//    isInverted: false
-//  }
+//  input: controller.direction.x,
+//  output: bot.wheels.x,
+//  isInverted: true
 //}, {
-//  input: {
-//    source: controller.y,
-//    isInverted: false
-//  },
-//  output: {
-//    source: bot.y,
-//    isInverted: true
-//  }
+//  input: controller.direction.y
+//  output: bot.wheels.y,
+//  isInverted: false
 //}]);
 //
 //// Form 5

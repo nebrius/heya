@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 import { EventEmitter } from 'events';
 import { types, inputTypes } from '../constants.js';
-import { directionToAxes } from '../filters/direction_to_axes/direction_to_axes.js';
+import directionToAxes from '../filters/direction_to_axes/direction_to_axes.js';
 import logger from '../logging.js';
 
 const handleDigital2DDirection = Symbol('handleDigital2DDirection');

@@ -23,7 +23,7 @@ THE SOFTWARE.
 */
 
 import { types, outputTypes } from '../constants.js';
-import { axesToDifferential } from '../filters/axes_to_differential/axes_to_differential.js';
+import axesToDifferential from '../filters/axes_to_differential/axes_to_differential.js';
 import logger from '../logging.js';
 
 const setupAnalog2DDifferential = Symbol('setupAnalog2DDifferential');
