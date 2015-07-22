@@ -76,7 +76,7 @@ export function createDriver(spec) {
           setImmediate(() => {
             isResponding = false;
             const { left, right } = axesToDifferential(xValue, yValue);
-            logger.debug(`Driver ${spec.name} responded to analog 2D differential value (${xValue},${yValue})`);
+            logger.debug(`Driver ${spec.name} responded to analog 2D differential value (${left},${right})`);
             output.respond(left, right);
           });
         }

@@ -27,6 +27,7 @@ import { createFilter } from '../filter.js';
 export default createFilter((x, y) => {
   let left;
   let right;
+  // TODO: this is not accurate, only works for digital inputs
   const normalizedAngle = 2 * Math.atan(y / x) / (Math.PI / 2);
   if (Math.abs(x) < 0.1 && Math.abs(y) < 0.1) {
     left = 0;

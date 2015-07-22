@@ -41,18 +41,16 @@ export const DifferentialServos = createDriver({
 
     const wheels = {
       type: outputTypes.ANALOG_2D_DIFFERENTIAL,
-      respond(left, right) {
-        console.log(left, right);
-        return;
+      respond: (left, right) => {
         if (left < 1) {
-          this[leftServo].cw(-left);
+          this[leftServo].ccw(-left);
         } else {
-          this[leftServo].ccw(left);
+          this[leftServo].cw(left);
         }
         if (right < 1) {
-          this[rightServo].ccw(-right);
+          this[rightServo].cw(-right);
         } else {
-          this[rightServo].cw(right);
+          this[rightServo].ccw(right);
         }
       }
     };
@@ -63,8 +61,6 @@ export const DifferentialServos = createDriver({
   },
 
   connect(cb) {
-    cb();
-    return;
     const id = `differential_servos_${idCounter++}}`;
     const board = new five.Board({
       repl: false,
