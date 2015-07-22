@@ -28,7 +28,19 @@ import { types } from './constants.js';
 import logger from './logging.js';
 import invertAxis from './filters/invert_axis/invert_axis.js';
 
+// Expose methods for creating drivers and controllers
+export { createController } from './controllers/controller.js';
+export { createDriver } from './drivers/driver.js';
+export { createFilter } from './filters/filter.js';
+
+// Expose constants
+export { types, inputTypes, outputTypes, directions } from './constants.js';
+
+// Expose built-in controllers
 export { WebKeyboard } from './controllers/web_keyboard/web_keyboard.js';
+export { Gamepad } from './controllers/gamepad/gamepad.js';
+
+// Expose built-in
 export { DifferentialServos } from './drivers/differential_servos/differential_servos.js';
 
 const bots = new Set();

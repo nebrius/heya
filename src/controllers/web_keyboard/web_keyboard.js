@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import events from 'events';
+import { EventEmitter } from 'events';
 import fs from 'fs';
 import http from 'http';
 import path from 'path';
@@ -40,16 +40,11 @@ export const WebKeyboard = createController({
   initialize(opts = {}) {
     this[options] = opts;
 
-    this[direction] = new events.EventEmitter();
+    this[direction] = new EventEmitter();
     this[direction].type = inputTypes.DIGITAL_2D_DIRECTION;
 
     this.inputs = {
       direction: this[direction]
-    };
-
-    this.defaults = {
-      axes: [ 'direction' ],
-      buttons: []
     };
   },
 

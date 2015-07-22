@@ -35,6 +35,7 @@ export const types = Object.freeze({
 export const inputTypes = Object.freeze({
   BINARY_STATE: 'BINARY_STATE',
   DIGITAL_2D_DIRECTION: 'DIGITAL_2D_DIRECTION',
+  ANALOG_1D_DIRECTION: 'ANALOG_1D_DIRECTION',
   ANALOG_2D_DIRECTION: 'ANALOG_2D_DIRECTION'
 });
 

@@ -92,5 +92,9 @@ export function createController(spec) {
     }
   }
 
+  if (spec.constants) {
+    Object.assign(Controller, spec.constants);
+  }
+
   return Controller;
 }
