@@ -1,11 +1,11 @@
 Heya
 ====
 
-[![Join the chat at https://gitter.im/bryan-m-hughes/heya](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bryan-m-hughes/heya?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/bryan-m-hughes/heya](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nebrius/heya?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 n. [Heya](https://en.wikipedia.org/wiki/Heya_%28sumo%29): In sumo wrestling, a heya (部屋) is an organization of sumo wrestlers where they train and live.
 
-Heya is a platform for quickly building sumobots. A Heya sumobot's software is split into two pieces: the controller and the driver. The controller takes input from some source and converts it into a common format. The driver then takes this normalized data and drives the motors.
+Heya is a platform for quickly building directly controlled robots, such as a sumobot. A Heya robot's software is split into two pieces: the controller and the driver. The controller takes input from some source and converts it into a common format. The driver then takes this normalized data and responds accordingly.
 
 Splitting the software this way makes it easy to mix and match various controllers and drivers.
 
@@ -15,21 +15,32 @@ Install with NPM:
 npm install heya
 ```
 
-## Examples
+## Example
 
-This example uses the Web Keyboard controller and the Pawel Bot driver for controlling an Arduino based sumobot.
+This example uses the Web Keyboard controller and the Differential Servo driver for controlling an Arduino based [Sumobot Jr](https://github.com/makenai/sumobot-jr).
 
 ```JavaScript
 var heya = require('heya');
+var controller = new heya.WebKeyboard();
+var driver = new heya.DifferentialServos({
+  leftServo: 'A0',
+  rightServo: 'A1'
+});
 
-heya.create({
-  controller: new heya.controllers.WebKeyboard(),
-  driver: new heya.drivers.PawelBot({
-    leftServo: 'A0',
-    rightServo: 'A1'
-  })
+heya.connect([{
+  input: controller.direction.x,
+  output: driver.wheels.left
+}, {
+  input: controller.direction.y,
+  output: driver.wheels.right
+}]);
+
+heya.run(function() {
+  console.log('Let's Sumo!');
 });
 ```
+
+For more examples, check out the [examples](eg) folder.
 
 ## Included Controllers
 
@@ -65,7 +76,7 @@ heya.create({
 
 ### Digital Joystick
 
-The Digital Joystick uses a microcontroller to read values from a four-way contact joystick, e.g. a d-pad on a game controller.
+The Digital Joystick uses a microcontroller to read values from a four-way contact joystick, similar to a d-pad on a game controller.
 
 _Options_:
 
@@ -89,25 +100,32 @@ _Options_:
   </tr>
 </table>
 
-```JavaScript
-var heya = require('heya');
+### Gamepad
 
-heya.create({
-  controller: new heya.controllers.DigitalJoystick({
-    left: '5',
-    right: '2',
-    up: '3',
-    down: '4'
-  }),
-  driver: ...
-});
-```
+The Gamepad reads from a USB based gaming device, such as a joystick or PlayStation controller. This controller offers a set of gamepad templates for wiring up some common game controllers, although you can also pass in your own custom template.
+
+_Options_:
+
+<table>
+  <thead>
+    <tr>
+      <th>Options</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+#### Template Format
 
 ## Included Drivers
 
-### Pawel Bot
+### Differential Servo
 
-The Pawel Bot driver drivers any sumobot that uses two servos in a differential configuration. Steering is accomplished via throttling the two wheels at different speeds. This incarnation of the Pawel Bot is used when the node instance running Heya directly calls Johnny-Five.
+The Differential Servo driver drives any robot that uses two servos in a differential configuration, such as the [Sumobot Jr](https://github.com/makenai/sumobot-jr). Steering is accomplished via throttling the two wheels at different speeds. This driver should be used when the node instance running Heya directly calls Johnny-Five.
  
 _Options_:
 
@@ -148,7 +166,7 @@ heya.create({
 });
 ```
 
-### Remote Pawel Bot
+### Remote Differential Driver
 
 The Remote Pawel Bot driver works the same as the normal Pawel Bot driver, except that it connects to a remote host that actually drives the motors, such as a Raspberry Pi, Beagle Bone Black, etc. Use this in conjunction with the [heya-remote-pawel-bot](https://github.com/bryan-m-hughes/heya-remote-pawel-bot) moudle running on the remote host.
  
