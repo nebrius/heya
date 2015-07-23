@@ -27,7 +27,7 @@ import logger from '../logging.js';
 export function createFilter(filter) {
   return (...args) => {
     const filteredData = filter(...args);
-    logger.debug(`Filtered ${args.join(',')} to ${JSON.stringify(filteredData)}`);
+    logger.trace(`Filtered ${args.join(',')} to ${JSON.stringify(filteredData)}`);
     return filteredData;
   };
 }

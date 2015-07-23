@@ -3,7 +3,7 @@ var heya = require('../lib/index.js');
 var Spark = require('spark-io');
 
 var controller = new heya.Gamepad({
-  type: heya.Gamepad.XBOX_360
+  type: heya.Gamepad.CYBORG_EVO
 });
 
 var bot = new heya.DifferentialServos({
@@ -16,11 +16,12 @@ var bot = new heya.DifferentialServos({
 });
 
 heya.connect([{
-  input: controller.rightThumbstick.x,
+  input: controller.primary.x,
   output: bot.wheels.left
 }, {
-  input: controller.rightThumbstick.y,
-  output: bot.wheels.right
+  input: controller.primary.y,
+  output: bot.wheels.right,
+  isInverted: true
 }]);
 
 heya.run(function() {

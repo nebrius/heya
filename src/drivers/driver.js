@@ -32,6 +32,7 @@ export const types = Object.freeze({
 });
 
 const setupAnalog2DDifferential = Symbol('setupAnalog2DDifferential');
+const armed = Symbol('armed');
 
 export function createDriver(spec) {
   if (typeof spec.initialize != 'function' || typeof spec.connect != 'function') {
@@ -69,6 +70,10 @@ export function createDriver(spec) {
       spec.connect(cb);
     }
 
+    arm() {
+      this[armed] = true;
+    }
+
     [setupAnalog2DDifferential](name, output) {
       logger.debug(`Wiring up analog 2D direction for driver ${spec.name}`);
 
@@ -81,7 +86,7 @@ export function createDriver(spec) {
           setImmediate(() => {
             isResponding = false;
             const { left, right } = axesToDifferential(xValue, yValue);
-            logger.debug(`Driver ${spec.name} responded to analog 2D differential value (${left},${right})`);
+            logger.trace(`Driver ${spec.name} responded to analog 2D differential value (${left},${right})`);
             output.respond(left, right);
           });
         }
@@ -93,7 +98,9 @@ export function createDriver(spec) {
         source: this,
         respond: (data) => {
           xValue = data;
-          respond();
+          if (this[armed]) {
+            respond();
+          }
         }
       };
       const rightOutput = {
@@ -102,7 +109,9 @@ export function createDriver(spec) {
         source: this,
         respond: (data) => {
           yValue = data;
-          respond();
+          if (this[armed]) {
+            respond();
+          }
         }
       };
       this[name] = {

@@ -51,7 +51,14 @@ export const Gamepad = createController({
         button1: 1,
         button2: 2,
         button3: 3,
-        p1: 6
+        button4: 4,
+        button5: 5,
+        buttonF1: 6,
+        buttonF2: 7,
+        buttonF3: 8,
+        buttonF4: 9,
+        leftUpButton: 10,
+        rightUpButton: 11
       }
     },
     XBOX_360: {
@@ -76,6 +83,7 @@ export const Gamepad = createController({
     logger.debug(`Gamepad is listening for events from device ${this[deviceId]}`);
 
     this[axisInputMap] = [];
+    this[buttonInputMap] = [];
     this.inputs = {};
 
     let axis; // eslint and babel disagree on whether to use let or const inline in the for...in
@@ -162,7 +170,7 @@ export const Gamepad = createController({
     // List the state of all currently attached devices
     logger.debug('Connected devices:');
     for (let i = 0; i < gamepad.numDevices(); i++) {
-      logger.debug(`  Found gamepad device ${gamepad.deviceAtIndex(i)}`);
+      logger.debug(`  Found gamepad device ${gamepad.deviceAtIndex(i).description}`);
     }
 
     // Create a game loop and poll for events
@@ -202,17 +210,5 @@ export const Gamepad = createController({
     });
 
     cb();
-
-    /*
-    down { id: 0, num: 1 }
-    up { id: 0, num: 1 }
-    down { id: 0, num: 3 }
-    up { id: 0, num: 3 }
-    down { id: 0, num: 2 }
-    up { id: 0, num: 2 }
-    move { id: 0, axis: 1, value: 0.004887580871582031 }
-    move { id: 0, axis: 1, value: 0.008797645568847656 }
-    move { id: 0, axis: 1, value: 0.010752677917480469 }
-    */
   }
 });

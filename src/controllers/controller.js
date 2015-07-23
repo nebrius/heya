@@ -38,6 +38,7 @@ const handleDigital2DDirection = Symbol('handleDigital2DDirection');
 const handleAnalog1DDirection = Symbol('handleAnalog1DDirection');
 const handleAnalog2DDirection = Symbol('handleAnalog2DDirection');
 const handleBinaryState = Symbol('handleBinaryState');
+const armed = Symbol('armed');
 
 export function createController(spec) {
   if (typeof spec.initialize != 'function' || typeof spec.connect != 'function') {
@@ -86,6 +87,10 @@ export function createController(spec) {
       spec.connect(cb);
     }
 
+    arm() {
+      this[armed] = true;
+    }
+
     [handleAnalog1DDirection](name, input) {
       logger.debug(`Wiring up analog 1D direction for controller ${spec.name}`);
       const axisEmitter = Object.assign(new EventEmitter(), {
@@ -94,30 +99,11 @@ export function createController(spec) {
         source: this
       });
       this[name] = axisEmitter;
-      // TODO: actually wire up
-    }
-
-    [handleDigital2DDirection](name, input) {
-      logger.debug(`Wiring up digital 2D direction for controller ${spec.name}`);
-      const xEmitter = Object.assign(new EventEmitter(), {
-        name: name + '_x',
-        type: interimTypes.ANALOG,
-        source: this
-      });
-      const yEmitter = Object.assign(new EventEmitter(), {
-        name: name + '_y',
-        type: interimTypes.ANALOG,
-        source: this
-      });
-      this[name] = {
-        x: xEmitter,
-        y: yEmitter
-      };
-      input.on('change', (direction) => {
-        logger.debug(`Controller ${spec.name} emitted digital 2D direction value ${direction}`);
-        const { x, y } = directionToAxes(direction);
-        xEmitter.emit('change', x);
-        yEmitter.emit('change', y);
+      input.on('change', (value) => {
+        if (this[armed]) {
+          logger.trace(`Controller ${spec.name} emitted analog 1D direction value ${value}`);
+          axisEmitter.emit('change', value);
+        }
       });
     }
 
@@ -137,7 +123,39 @@ export function createController(spec) {
         x: xEmitter,
         y: yEmitter
       };
-      // TODO: actually wire up
+      input.on('change', ({ x, y }) => {
+        if (this[armed]) {
+          logger.trace(`Controller ${spec.name} emitted analog 2D direction value (${x}, ${y})`);
+          xEmitter.emit('change', x);
+          yEmitter.emit('change', y);
+        }
+      });
+    }
+
+    [handleDigital2DDirection](name, input) {
+      logger.debug(`Wiring up digital 2D direction for controller ${spec.name}`);
+      const xEmitter = Object.assign(new EventEmitter(), {
+        name: name + '_x',
+        type: interimTypes.ANALOG,
+        source: this
+      });
+      const yEmitter = Object.assign(new EventEmitter(), {
+        name: name + '_y',
+        type: interimTypes.ANALOG,
+        source: this
+      });
+      this[name] = {
+        x: xEmitter,
+        y: yEmitter
+      };
+      input.on('change', (direction) => {
+        if (this[armed]) {
+          logger.trace(`Controller ${spec.name} emitted digital 2D direction value ${direction}`);
+          const { x, y } = directionToAxes(direction);
+          xEmitter.emit('change', x);
+          yEmitter.emit('change', y);
+        }
+      });
     }
 
     [handleBinaryState](name, input) {

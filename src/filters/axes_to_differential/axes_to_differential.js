@@ -24,25 +24,33 @@ THE SOFTWARE.
 
 import { createFilter } from '../filter.js';
 
+const DEAD_ZONE = 0.1;
+
 export default createFilter((x, y) => {
+  // Create a slight deadzone around the center
+  if (Math.abs(x) < DEAD_ZONE && Math.abs(y) < DEAD_ZONE) {
+    return {
+      left: 0,
+      right: 0
+    };
+  }
   let left;
   let right;
-  // TODO: this is not accurate, only works for digital inputs
-  const normalizedAngle = 2 * Math.atan(y / x) / (Math.PI / 2);
-  if (Math.abs(x) < 0.1 && Math.abs(y) < 0.1) {
-    left = 0;
-    right = 0;
-  } else if (x >= 0 && y >= 0) {
-    right = 1;
-    left = -1 + normalizedAngle;
-  } else if (x < 0 && y >= 0) {
-    right = -1 - normalizedAngle;
+  let angle = Math.atan(y / x) / Math.PI;
+  if (x >= 0 && y >= 0) {
+    right = (angle - 1/4) / (1/4);
     left = 1;
+  } else if (x < 0 && y >= 0) {
+    angle = angle + 1;
+    left = (3/4 - angle) / (3/4);
+    right = 1;
   } else if (x < 0 && y < 0) {
+    angle = angle + 1;
     left = -1;
-    right = 1 - normalizedAngle;
+    right = (5/4 - angle) / (5/4);
   } else if (x >= 0 && y < 0) {
-    left = 1 + normalizedAngle;
+    angle = angle + 2;
+    left = (angle - 7/4) / (7/4);
     right = -1;
   }
   return {
