@@ -23,8 +23,6 @@ heya.connect([{
   output: bot.wheels.right
 }]);
 
-process.exit();
-
 heya.run(function() {
   console.log('Fly my pretties!');
 });

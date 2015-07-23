@@ -22,9 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import { types, outputTypes } from '../constants.js';
+import { types as interimTypes } from '../constants.js';
 import axesToDifferential from '../filters/axes_to_differential/axes_to_differential.js';
 import logger from '../logging.js';
+
+export const types = Object.freeze({
+  BINARY_STATE: 'BINARY_STATE',
+  ANALOG_2D_DIFFERENTIAL: 'ANALOG_2D_DIFFERENTIAL'
+});
 
 const setupAnalog2DDifferential = Symbol('setupAnalog2DDifferential');
 
@@ -38,7 +43,7 @@ export function createDriver(spec) {
     constructor(...opts) {
       spec.initialize(...opts);
 
-      this.type = types.DRIVER;
+      this.type = interimTypes.DRIVER;
       this.outputs = {};
       this.name = spec.name;
 
@@ -50,11 +55,11 @@ export function createDriver(spec) {
       for (output in outputs) {
         if (outputs.hasOwnProperty(output)) {
           switch (outputs[output].type) {
-            case outputTypes.ANALOG_2D_DIFFERENTIAL:
+            case types.ANALOG_2D_DIFFERENTIAL:
               this[setupAnalog2DDifferential](output, outputs[output]);
               break;
             default:
-              throw new Error(`Unknown driver input type ${outputs[output].type}"`);
+              throw new Error(`Unknown driver input type "${outputs[output].type}"`);
           }
         }
       }
@@ -65,7 +70,7 @@ export function createDriver(spec) {
     }
 
     [setupAnalog2DDifferential](name, output) {
-      logger.debug(`Wiring up digital 2D direction for controller ${spec.name}`);
+      logger.debug(`Wiring up analog 2D direction for driver ${spec.name}`);
 
       let xValue;
       let yValue;
@@ -84,7 +89,7 @@ export function createDriver(spec) {
 
       const leftOutput = {
         name: name + '_left',
-        type: types.ANALOG,
+        type: interimTypes.ANALOG,
         source: this,
         respond: (data) => {
           xValue = data;
@@ -93,7 +98,7 @@ export function createDriver(spec) {
       };
       const rightOutput = {
         name: name + '_right',
-        type: types.ANALOG,
+        type: interimTypes.ANALOG,
         source: this,
         respond: (data) => {
           yValue = data;

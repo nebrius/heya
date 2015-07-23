@@ -34,7 +34,9 @@ export { createDriver } from './drivers/driver.js';
 export { createFilter } from './filters/filter.js';
 
 // Expose constants
-export { types, inputTypes, outputTypes, directions } from './constants.js';
+export { types, directions } from './constants.js';
+export { types as inputTypes } from './controllers/controller.js';
+export { types as outputTypes } from './drivers/driver.js';
 
 // Expose built-in controllers
 export { WebKeyboard } from './controllers/web_keyboard/web_keyboard.js';

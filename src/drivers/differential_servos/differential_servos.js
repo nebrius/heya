@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import { outputTypes } from '../../constants.js';
-import { createDriver } from '../driver.js';
+import { createDriver, types } from '../driver.js';
 import five from 'johnny-five';
 
 const options = Symbol('options');
@@ -40,7 +39,7 @@ export const DifferentialServos = createDriver({
     this[options] = opts;
 
     const wheels = {
-      type: outputTypes.ANALOG_2D_DIFFERENTIAL,
+      type: types.ANALOG_2D_DIFFERENTIAL,
       respond: (left, right) => {
         if (left < 1) {
           this[leftServo].ccw(-left);

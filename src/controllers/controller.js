@@ -23,11 +23,21 @@ THE SOFTWARE.
 */
 
 import { EventEmitter } from 'events';
-import { types, inputTypes } from '../constants.js';
+import { types as interimTypes } from '../constants.js';
 import directionToAxes from '../filters/direction_to_axes/direction_to_axes.js';
 import logger from '../logging.js';
 
+export const types = Object.freeze({
+  BINARY_STATE: 'BINARY_STATE',
+  DIGITAL_2D_DIRECTION: 'DIGITAL_2D_DIRECTION',
+  ANALOG_1D_DIRECTION: 'ANALOG_1D_DIRECTION',
+  ANALOG_2D_DIRECTION: 'ANALOG_2D_DIRECTION'
+});
+
 const handleDigital2DDirection = Symbol('handleDigital2DDirection');
+const handleAnalog1DDirection = Symbol('handleAnalog1DDirection');
+const handleAnalog2DDirection = Symbol('handleAnalog2DDirection');
+const handleBinaryState = Symbol('handleBinaryState');
 
 export function createController(spec) {
   if (typeof spec.initialize != 'function' || typeof spec.connect != 'function') {
@@ -41,7 +51,7 @@ export function createController(spec) {
       super();
       spec.initialize(...opts);
 
-      this.type = types.CONTROLLER;
+      this.type = interimTypes.CONTROLLER;
       this.inputs = {};
       this.name = spec.name;
 
@@ -53,11 +63,20 @@ export function createController(spec) {
       for (input in inputs) {
         if (inputs.hasOwnProperty(input)) {
           switch (inputs[input].type) {
-            case inputTypes.DIGITAL_2D_DIRECTION:
+            case types.DIGITAL_2D_DIRECTION:
               this[handleDigital2DDirection](input, inputs[input]);
               break;
+            case types.ANALOG_1D_DIRECTION:
+              this[handleAnalog1DDirection](input, inputs[input]);
+              break;
+            case types.ANALOG_2D_DIRECTION:
+              this[handleAnalog2DDirection](input, inputs[input]);
+              break;
+            case types.BINARY_STATE:
+              this[handleBinaryState](input, inputs[input]);
+              break;
             default:
-              throw new Error(`Unknown controller input type ${inputs[input].type}"`);
+              throw new Error(`Unknown controller input type "${inputs[input].type}"`);
           }
         }
       }
@@ -67,16 +86,27 @@ export function createController(spec) {
       spec.connect(cb);
     }
 
+    [handleAnalog1DDirection](name, input) {
+      logger.debug(`Wiring up analog 1D direction for controller ${spec.name}`);
+      const axisEmitter = Object.assign(new EventEmitter(), {
+        name,
+        type: interimTypes.ANALOG,
+        source: this
+      });
+      this[name] = axisEmitter;
+      // TODO: actually wire up
+    }
+
     [handleDigital2DDirection](name, input) {
       logger.debug(`Wiring up digital 2D direction for controller ${spec.name}`);
       const xEmitter = Object.assign(new EventEmitter(), {
         name: name + '_x',
-        type: types.ANALOG,
+        type: interimTypes.ANALOG,
         source: this
       });
       const yEmitter = Object.assign(new EventEmitter(), {
         name: name + '_y',
-        type: types.ANALOG,
+        type: interimTypes.ANALOG,
         source: this
       });
       this[name] = {
@@ -89,6 +119,28 @@ export function createController(spec) {
         xEmitter.emit('change', x);
         yEmitter.emit('change', y);
       });
+    }
+
+    [handleAnalog2DDirection](name, input) {
+      logger.debug(`Wiring up analog 2D direction for controller ${spec.name}`);
+      const xEmitter = Object.assign(new EventEmitter(), {
+        name: name + '_x',
+        type: interimTypes.ANALOG,
+        source: this
+      });
+      const yEmitter = Object.assign(new EventEmitter(), {
+        name: name + '_y',
+        type: interimTypes.ANALOG,
+        source: this
+      });
+      this[name] = {
+        x: xEmitter,
+        y: yEmitter
+      };
+      // TODO: actually wire up
+    }
+
+    [handleBinaryState](name, input) {
     }
   }
 

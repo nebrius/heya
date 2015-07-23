@@ -26,8 +26,7 @@ import { EventEmitter } from 'events';
 import fs from 'fs';
 import http from 'http';
 import path from 'path';
-import { inputTypes } from '../../constants.js';
-import { createController } from '../controller.js';
+import { createController, types } from '../controller.js';
 import logger from '../../logging.js';
 
 const options = Symbol('options');
@@ -41,7 +40,7 @@ export const WebKeyboard = createController({
     this[options] = opts;
 
     this[direction] = new EventEmitter();
-    this[direction].type = inputTypes.DIGITAL_2D_DIRECTION;
+    this[direction].type = types.DIGITAL_2D_DIRECTION;
 
     this.inputs = {
       direction: this[direction]

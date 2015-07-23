@@ -24,8 +24,7 @@ THE SOFTWARE.
 
 import { EventEmitter } from 'events';
 import gamepad from 'gamepad';
-import { inputTypes } from '../../constants.js';
-import { createController } from '../controller.js';
+import { createController, types } from '../controller.js';
 import logger from '../../logging.js';
 
 const options = Symbol('options');
@@ -109,7 +108,7 @@ export const Gamepad = createController({
 
   [createAnalog1DInput](axisMap) {
     const emitter = Object.assign(new EventEmitter(), {
-      type: inputTypes.ANALOG_1D_DIRECTION,
+      type: types.ANALOG_1D_DIRECTION,
       updateValue(axis, newValue) {
         this.emit('change', newValue);
       }
@@ -124,7 +123,7 @@ export const Gamepad = createController({
       y: 0
     };
     const emitter = Object.assign(new EventEmitter(), {
-      type: inputTypes.ANALOG_2D_DIRECTION,
+      type: types.ANALOG_2D_DIRECTION,
       updateValue(axis, newValue) {
         if (axis == axesMap[0]) {
           currentValue.x = newValue;
@@ -141,7 +140,7 @@ export const Gamepad = createController({
 
   [createButtonInput](num) {
     const emitter = Object.assign(new EventEmitter(), {
-      type: inputTypes.BINARY_STATE,
+      type: types.BINARY_STATE,
       setValue() {
         this.emit('change', true);
       },
@@ -154,12 +153,16 @@ export const Gamepad = createController({
   },
 
   connect(cb) {
-    // Initialize the library
     gamepad.init();
 
+    if (this[deviceId] >= gamepad.numDevices()) {
+      throw new Error('Could not find a gamepad');
+    }
+
     // List the state of all currently attached devices
+    logger.debug('Connected devices:');
     for (let i = 0; i < gamepad.numDevices(); i++) {
-      logger.debug(`Found gamepad device ${gamepad.deviceAtIndex(i)}`);
+      logger.debug(`  Found gamepad device ${gamepad.deviceAtIndex(i)}`);
     }
 
     // Create a game loop and poll for events
