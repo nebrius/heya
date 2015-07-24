@@ -27,34 +27,39 @@ import { createFilter } from '../filter.js';
 const DEAD_ZONE = 0.1;
 
 export default createFilter((x, y) => {
-  // Create a slight deadzone around the center
+  // Create a slight deadzone around the center, inside which nothing happens
   if (Math.abs(x) < DEAD_ZONE && Math.abs(y) < DEAD_ZONE) {
     return {
       left: 0,
       right: 0
     };
   }
+
+  // Calculate the direction
   let left;
   let right;
   let angle = Math.atan(y / x) / Math.PI;
   if (x >= 0 && y >= 0) {
-    right = (angle - 1/4) / (1/4);
+    right = (angle - 1 / 4) / (1 / 4);
     left = 1;
   } else if (x < 0 && y >= 0) {
     angle = angle + 1;
-    left = (3/4 - angle) / (3/4);
+    left = (3 / 4 - angle) / (3 / 4);
     right = 1;
   } else if (x < 0 && y < 0) {
     angle = angle + 1;
     left = -1;
-    right = (5/4 - angle) / (5/4);
+    right = (5 / 4 - angle) / (5 / 4);
   } else if (x >= 0 && y < 0) {
     angle = angle + 2;
-    left = (angle - 7/4) / (7/4);
+    left = (angle - 7 / 4) / (7 / 4);
     right = -1;
   }
+
+  // Scale the motors by the distance, clamping outside the circle of diameter 1
+  const distance = Math.min(1, Math.sqrt(x * x + y * y));
   return {
-    left,
-    right
+    left: left * distance,
+    right: right * distance
   };
 });
