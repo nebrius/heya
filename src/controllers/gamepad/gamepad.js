@@ -60,13 +60,6 @@ export const Gamepad = createController({
         leftUpButton: 10,
         rightUpButton: 11
       }
-    },
-    XBOX_360: {
-      axes: {
-        leftThumbstick: [ 0, 1 ],
-        rightThumbstick: [ 2, 3 ]
-      },
-      buttons: {}
     }
   },
 
