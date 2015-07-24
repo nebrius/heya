@@ -42,8 +42,9 @@ export { types as outputTypes } from './drivers/driver.js';
 export { WebKeyboard } from './controllers/web_keyboard/web_keyboard.js';
 export { Gamepad } from './controllers/gamepad/gamepad.js';
 
-// Expose built-in
+// Expose built-in drivers
 export { DifferentialServos } from './drivers/differential_servos/differential_servos.js';
+export { RollingSpider } from './drivers/rolling_spider/rolling_spider.js';
 
 const bots = new Set();
 

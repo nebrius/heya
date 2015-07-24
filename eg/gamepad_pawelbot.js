@@ -1,4 +1,3 @@
-process.env.HEYA_DEBUG_LOGGING = true;
 var heya = require('../lib/index.js');
 var Spark = require('spark-io');
 
@@ -8,11 +7,7 @@ var controller = new heya.Gamepad({
 
 var bot = new heya.DifferentialServos({
   leftServo: 'A0',
-  rightServo: 'A1',
-  io: new Spark({
-    token: '04b67559fde8c137c38b1d01525530e7f0a9e016',
-    deviceId: '53ff6f066667574847132167'
-  })
+  rightServo: 'A1'
 });
 
 heya.connect([{
