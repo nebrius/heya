@@ -5,9 +5,9 @@ Heya
 
 n. [Heya](https://en.wikipedia.org/wiki/Heya_%28sumo%29): In sumo wrestling, a heya (部屋) is an organization of sumo wrestlers where they train and live.
 
-Heya is a platform for quickly building directly controlled robots, such as a sumobot. A Heya robot's software is split into two pieces: the controller and the driver. The controller takes input from some source and converts it into a common format. The driver then takes this normalized data and responds accordingly.
+Heya is a platform for quickly building directly controlled robots, such as a Sumobot. A Heya robot's software is split into two pieces: the controller and the driver. The controller takes input from some source and converts it into a common format. The driver then takes this normalized data and responds accordingly.
 
-Splitting the software this way makes it easy to mix and match various controllers and drivers.
+Splitting the software this way makes it easy to mix and match various controllers and drivers so that pesky interfacing bugs don't interfere with your path to glory!
 
 Install with NPM:
 
@@ -53,7 +53,7 @@ _Options_:
 <table>
   <thead>
     <tr>
-      <th>Options</th>
+      <th>Option</th>
       <th>Type</th>
       <th>Description</th>
     </tr>
@@ -65,6 +65,17 @@ _Options_:
   </tr>
 </table>
 
+_Available Inputs_:
+
+<table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+</table>
+
 ```JavaScript
 var heya = require('heya');
 
@@ -74,6 +85,7 @@ heya.create({
 });
 ```
 
+<!--
 ### Digital Joystick
 
 The Digital Joystick uses a microcontroller to read values from a four-way contact joystick, similar to a d-pad on a game controller.
@@ -83,7 +95,7 @@ _Options_:
 <table>
   <thead>
     <tr>
-      <th>Options</th>
+      <th>Option</th>
       <th>Type</th>
       <th>Description</th>
     </tr>
@@ -99,6 +111,7 @@ _Options_:
     <td>The pin number for each of the four direction contacts</td>
   </tr>
 </table>
+-->
 
 ### Gamepad
 
@@ -109,17 +122,62 @@ _Options_:
 <table>
   <thead>
     <tr>
-      <th>Options</th>
+      <th>Option</th>
       <th>Type</th>
       <th>Description</th>
     </tr>
   </thead>
   <tr>
-    <td></td>
+    <td>type</td>
+    <td>heya.Gamepad.CYBORG_EVO | custom</td>
+    <td>The controller mapping to use</td>
+  </tr>
+  <tr>
+  <td></td>
+  <td colspan="2">
+    <table>
+      <thead>
+        <th>Name</th>
+        <th>Description</th>
+      </thead>
+      <tr>
+        <td>CYBORG_EVO</td>
+        <td><a href="http://gamergear.wikia.com/wiki/Cyborg_Evo_Joystick">Saitek Cyborg Evo</a> USB joystick</td>
+      </tr>
+    </table>
+  </td>
   </tr>
 </table>
 
+_Available Inputs_:
+
+Dependent on the ```type``` option passed in.
+
 #### Template Format
+
+The gamepad controller uses [node-gamepad](https://github.com/creationix/node-gamepad) under the hood. I recommend familiarizing yourself with the naming and numbering scheme that it uses when creating a custom template. To create a custom template, pass in an object with the following structure:
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>axes</td>
+    <td>Object</td>
+    <td>A collection of named 1D or 2D axes on the gamepad. Each key is the name, and the value is an array of one or two numbers for a 1D or 2D input, respectively. The number(s) are the <code>axis</code> options sent by node-gamepad in <code>move</code> events</td>
+  </tr>
+  <tr>
+    <td>buttons</td>
+    <td>Object</td>
+    <td>A collection of named buttons on the gamepad. Each key is the name, and the value is a number. The number is the <code>num</code> option sent by node-gamepad in <code>up</code> and <code>down</code> events</td>
+  </tr>
+</table>
+
+Each axis or button name gets mapped to an input on the Gamepad instance.
 
 ## Included Drivers
 
@@ -132,7 +190,7 @@ _Options_:
 <table>
   <thead>
     <tr>
-      <th>Options</th>
+      <th>Option</th>
       <th>Type</th>
       <th>Description</th>
     </tr>
@@ -166,6 +224,7 @@ heya.create({
 });
 ```
 
+<!--
 ### Remote Differential Driver
 
 The Remote Pawel Bot driver works the same as the normal Pawel Bot driver, except that it connects to a remote host that actually drives the motors, such as a Raspberry Pi, Beagle Bone Black, etc. Use this in conjunction with the [heya-remote-pawel-bot](https://github.com/bryan-m-hughes/heya-remote-pawel-bot) moudle running on the remote host.
@@ -175,7 +234,7 @@ _Options_:
 <table>
   <thead>
     <tr>
-      <th>Options</th>
+      <th>Option</th>
       <th>Type</th>
       <th>Description</th>
     </tr>
@@ -197,6 +256,7 @@ heya.create({
   })
 });
 ```
+-->
 
 ## Custom controllers and drivers
 
