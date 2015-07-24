@@ -76,15 +76,6 @@ _Available Inputs_:
   </thead>
 </table>
 
-```JavaScript
-var heya = require('heya');
-
-heya.create({
-  controller: new heya.controllers.WebKeyboard(),
-  driver: ...
-});
-```
-
 <!--
 ### Digital Joystick
 
