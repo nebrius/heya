@@ -40,6 +40,7 @@ export const Gamepad = createController({
   name: 'Gamepad',
 
   constants: {
+    // TODO: add support for digital2Daxis for the HAT switch
     CYBORG_EVO: {
       axes: {
         primary: [ 0, 1 ],

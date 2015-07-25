@@ -71,9 +71,15 @@ _Available Inputs_:
   <thead>
     <tr>
       <th>Input</th>
+      <th>Type</th>
       <th>Description</th>
     </tr>
   </thead>
+  <tr>
+    <td>direction</td>
+    <td>2D axis</td>
+    <td>This single input converts four buttons into an 8-way direction, like a d-pad on a game controller</td>
+  </tr>
 </table>
 
 <!--
@@ -142,7 +148,54 @@ _Options_:
 
 _Available Inputs_:
 
-Dependent on the ```type``` option passed in.
+THe available inputs are dependent on the ```type``` option passed in. See the table below for the inputs provided by the built-in templates, or the section on template format below to see how custom templates are mapped.
+
+_Cyborg Evo Inputs_:
+
+<table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>primary</td>
+    <td>2D axis</td>
+    <td>The main stick movement, i.e. pushing forward, backward, left, or right</td>
+  </tr>
+  <tr>
+    <td>yaw</td>
+    <td>1D axis</td>
+    <td>Twisting the stick clockwise or counterclockwise</td>
+  </tr>
+  <tr>
+    <td>throttle</td>
+    <td>1D axis</td>
+    <td>This is the lever at the base of the stick</td>
+  </tr>
+  <tr>
+    <td>trigger</td>
+    <td>Button</td>
+    <td>The main trigger on the stick</td>
+  </tr>
+  <tr>
+    <td>button1 - button5</td>
+    <td>Button</td>
+    <td>The buttons labeled "1" through "5" on the head of the stick</td>
+  </tr>
+  <tr>
+    <td>buttonF1 - buttonF4</td>
+    <td>Button</td>
+    <td>THe function buttons on the sides of the base labeled "F1" through "F4"</td>
+  </tr>
+  <tr>
+    <td>leftUpButton, rightUpButton</td>
+    <td>Button</td>
+    <td>The button above the F buttons labeled as "^" on either side of the base</td>
+  </tr>
+</table>
 
 #### Template Format
 
@@ -168,7 +221,21 @@ The gamepad controller uses [node-gamepad](https://github.com/creationix/node-ga
   </tr>
 </table>
 
-Each axis or button name gets mapped to an input on the Gamepad instance.
+Each axis or button name gets mapped to an input on the Gamepad instance. Consider the following example:
+
+```JavaScript
+{
+  axes: {
+    primary: [ 0, 1 ]
+  },
+  buttons: {
+    a: 0,
+    b: 1
+  }
+}
+```
+
+This creates one 2D axis called ```primary``` and two buttons called ```a``` and ```b```. The axis gets mapped as ```myGamepadInstance.primary```, ```myGamepadInstance.a```, and ```myGamepadInstance.b```, respectively.
 
 ## Included Drivers
 
