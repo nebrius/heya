@@ -9,10 +9,12 @@ Heya is a platform for quickly building directly controlled robots, such as a Su
 
 Splitting the software this way makes it easy to mix and match various controllers and drivers so that pesky interfacing bugs don't interfere with your path to glory!
 
+_Note:_ The documentation here is for the next version of heya, tagged ```next``` in NPM. See the [docs in NPM](https://www.npmjs.com/package/heya) for the docs for the current version.
+
 Install with NPM:
 
 ```
-npm install heya
+npm install heya@next
 ```
 
 ## Example
