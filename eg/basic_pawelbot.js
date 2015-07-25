@@ -1,5 +1,4 @@
 var heya = require('../lib/index.js');
-var Spark = require('spark-io');
 
 var controller = new heya.WebKeyboard();
 

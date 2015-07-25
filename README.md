@@ -259,28 +259,11 @@ _Options_:
     <td>An instance of a Johnny-Five IO plugin to use to drive the motors</td>
   </tr>
   <tr>
-    <td>leftServo | rightServo</td>
-    <td>Number</td>
-    <td>The pin number for each of the two servos</td>
+    <td>leftServo, rightServo</td>
+    <td>Number | String</td>
+    <td>The pin for each of the two servos</td>
   </tr>
 </table>
-
-```JavaScript
-var heya = require('heya');
-var Spark = require('spark-io');
-
-heya.create({
-  controller: ...,
-  driver: new heya.drivers.PawelBot({
-    leftServo: 'A0',
-    rightServo: 'A1',
-    io: new Spark({
-      token: process.env.SPARK_TOKEN,
-      deviceId: process.env.SPARK_DEVICE_ID
-    })
-  })
-});
-```
 
 <!--
 ### Remote Differential Driver
