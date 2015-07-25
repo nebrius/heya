@@ -301,21 +301,7 @@ heya.create({
 
 ## Custom controllers and drivers
 
-### Controllers
-
-A controller extends EventEmitter and emits a ```move``` event when input is received. The move event payload is an object with two properties: ```x``` and ```y```. These two values can be thought of as representing the position of an analog joystick.
-
-The controller also must implement a ```connect``` instance method. The connect method is where any initialization should take place. This method takes a single argument, a callback, that is to be called once initialization is complete.
-
-See the [Digital Joystick](src/controllers/digital_joystick/digital_joystick.js) for an example.
-
-### Drivers
-
-A driver implements two instance methods, but does not extend EventEmitter. Drivers must implement a ```connect``` method that behaves the same as a controller's ```connect``` method.
-
-Drivers also must implement a ```move``` method that takes an object indicating the direction to move in, which is one of the values emitted by a controller.
-
-See the [Pawel Bot](src/drivers/pawel_bot.js) for an example.
+Coming soon!
 
 License
 =======
