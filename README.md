@@ -3,13 +3,13 @@ Heya
 
 [![Join the chat at https://gitter.im/bryan-m-hughes/heya](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nebrius/heya?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-n. [Heya](https://en.wikipedia.org/wiki/Heya_%28sumo%29): In sumo wrestling, a heya (部屋) is an organization of sumo wrestlers where they train and live.
+_Note:_ The documentation here is for the next version of heya, tagged ```next``` in NPM. See the [docs in NPM](https://www.npmjs.com/package/heya) for the current version of the docs. THIS IS A WORK IN PROGRESS AND WILL CHANGE! You have been warned :)
+
+noun. [Heya](https://en.wikipedia.org/wiki/Heya_%28sumo%29): In sumo wrestling, a heya (部屋) is an organization of sumo wrestlers where they train and live.
 
 Heya is a platform for quickly building directly controlled robots, such as a Sumobot. A Heya robot's software is split into two pieces: the controller and the driver. The controller takes input from some source and converts it into a common format. The driver then takes this normalized data and responds accordingly.
 
 Splitting the software this way makes it easy to mix and match various controllers and drivers so that pesky interfacing bugs don't interfere with your path to glory!
-
-_Note:_ The documentation here is for the next version of heya, tagged ```next``` in NPM. See the [docs in NPM](https://www.npmjs.com/package/heya) for the docs for the current version.
 
 Install with NPM:
 
