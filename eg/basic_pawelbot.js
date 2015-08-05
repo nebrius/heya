@@ -7,13 +7,13 @@ var bot = new heya.DifferentialServos({
   rightServo: 'A1'
 });
 
-heya.connect([{
-  input: controller.direction.x,
-  output: bot.wheels.left
-}, {
-  input: controller.direction.y,
-  output: bot.wheels.right
-}]);
+heya.connect({
+  input: {
+    x: controller.direction.x,
+    y: controller.direction.y
+  },
+  output: bot.wheels
+});
 
 heya.run(function() {
   console.log('Fly my pretties!');

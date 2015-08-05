@@ -9,14 +9,16 @@ var bot = new heya.DifferentialServos({
   rightServo: 'A1'
 });
 
-heya.connect([{
-  input: controller.primary.x,
+heya.connect({
+  input: {
+    x: controller.primary.x,
+    y: {
+      source: controller.primary.y,
+      invert: true
+    }
+  },
   output: bot.wheels.left
-}, {
-  input: controller.primary.y,
-  output: bot.wheels.right,
-  isInverted: true
-}]);
+});
 
 heya.run(function() {
   console.log('Fly my pretties!');

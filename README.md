@@ -24,18 +24,18 @@ This example uses the Web Keyboard controller and the Differential Servo driver 
 ```JavaScript
 var heya = require('heya');
 var controller = new heya.WebKeyboard();
-var driver = new heya.DifferentialServos({
+var bot = new heya.DifferentialServos({
   leftServo: 'A0',
   rightServo: 'A1'
 });
 
-heya.connect([{
-  input: controller.direction.x,
-  output: driver.wheels.left
-}, {
-  input: controller.direction.y,
-  output: driver.wheels.right
-}]);
+heya.connect({
+  input: {
+    x: controller.direction.x,
+    y: controller.direction.y
+  },
+  output: bot.wheels
+});
 
 heya.run(function() {
   console.log('Let's Sumo!');

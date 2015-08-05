@@ -44,20 +44,10 @@ export { Gamepad } from './controllers/gamepad/gamepad.js';
 
 // Expose built-in drivers
 export { DifferentialServos } from './drivers/differential_servos/differential_servos.js';
-export { RollingSpider } from './drivers/rolling_spider/rolling_spider.js';
 
 const bots = new Set();
 
-export function connect(mapping, driver) {
-  // If two arguments were passed in, assume that they are a controller/driver pair
-  if (arguments.length == 2) {
-    mapping = {
-      input: mapping,
-      output: driver
-    };
-  } else if (arguments.length != 1) {
-    throw new Error('Invalid number of arguments passed to "connect"');
-  }
+export function connect(mapping) {
   if (!Array.isArray(mapping)) {
     mapping = [ mapping ];
   }
