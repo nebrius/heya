@@ -1,7 +1,9 @@
 Heya
 ====
 
-[![Join the chat at https://gitter.im/bryan-m-hughes/heya](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nebrius/heya?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/bryan-m-hughes/heya](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nebrius/heya?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+_Note:_ I have a lot of other projects keeping me busy. Someday I'd love to return to this project, but I don't see that happening any time soon unfortunately.
 
 _Note:_ The documentation here is for the next version of heya, tagged ```next``` in NPM. See the [docs in NPM](https://www.npmjs.com/package/heya) for the current version of the docs. THIS IS A WORK IN PROGRESS AND WILL CHANGE! You have been warned :)
 
